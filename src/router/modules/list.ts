@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '用户列表',
         },
-        component: () => import('@/views/list/basicList/index.vue'),
+        component: () => import('@/views/list/userList/index.vue'),
       },
       {
         path: 'basic-list',

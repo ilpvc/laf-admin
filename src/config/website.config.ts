@@ -1,4 +1,4 @@
-import loginImage from '@/assets/images/account-logo.png';
+import loginImage from '@/assets/images/logo-laf.png';
 
 export const websiteConfig = Object.freeze({
   title: '校园失物招领',

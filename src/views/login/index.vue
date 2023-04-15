@@ -4,7 +4,7 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img :src="websiteConfig.loginImage" alt="" />
+          <!--          <img :src="websiteConfig.loginImage" alt="" />-->
         </div>
         <div class="view-account-top-desc">{{ websiteConfig.loginDesc }}</div>
       </div>
@@ -93,6 +93,8 @@
   import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
   import { PageEnum } from '@/enums/pageEnum';
   import { websiteConfig } from '@/config/website.config';
+  import { LoginParams } from '@/interface/ApiInterface';
+
   interface FormState {
     username: string;
     password: string;
@@ -134,14 +136,17 @@
         };
 
         try {
-          const { code, message: msg } = await userStore.login(params);
+          const { code, message: msg } = await userStore.login({
+            email: params.username,
+            password: params.password,
+          });
           message.destroyAll();
           if (code == ResultEnum.SUCCESS) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
             message.success('登录成功，即将进入系统');
             if (route.name === LOGIN_NAME) {
-              router.replace('/');
-            } else router.replace(toPath);
+              await router.replace('/');
+            } else await router.replace(toPath);
           } else {
             message.info(msg || '登录失败');
           }
@@ -175,8 +180,9 @@
       text-align: center;
 
       &-desc {
-        font-size: 14px;
-        color: #808695;
+        font-size: 18px;
+        //color: #808695;
+        color: black;
       }
     }
 

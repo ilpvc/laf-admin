@@ -1,4 +1,6 @@
 import { http } from '@/utils/http/axios';
+import { LoginParams } from '@/interface/ApiInterface';
+import { service } from '@/utils/http/axios/Axios';
 
 export interface BasicResponseModel<T = any> {
   code: number;
@@ -25,18 +27,28 @@ export function getUserInfo() {
 /**
  * @description: 用户登录
  */
-export function login(params) {
-  return http.request<BasicResponseModel>(
-    {
-      url: '/login',
-      method: 'POST',
-      params,
-    },
-    {
-      isTransformResponse: false,
-    }
-  );
-}
+// export function login(params) {
+//   return http.request<BasicResponseModel>(
+//     {
+//       url: '/login',
+//       method: 'POST',
+//       params,
+//     },
+//     {
+//       isTransformResponse: false,
+//     }
+//   );
+// }
+
+export const login = (params: LoginParams) => {
+  console.log(params);
+  return service({
+    url: `/login/`,
+    method: 'post',
+    params: {},
+    data: params,
+  });
+};
 
 /**
  * @description: 用户修改密码

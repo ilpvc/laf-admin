@@ -5,6 +5,7 @@ import { ResultEnum } from '@/enums/httpEnum';
 
 import { getUserInfo, login } from '@/api/system/user';
 import { storage } from '@/utils/Storage';
+import { LoginParams } from '@/interface/ApiInterface';
 
 export interface IUserState {
   token: string;
@@ -56,17 +57,18 @@ export const useUserStore = defineStore({
       this.info = info;
     },
     // 登录
-    async login(userInfo) {
+    async login(userInfo: LoginParams) {
       try {
         const response = await login(userInfo);
-        const { result, code } = response;
+        console.log(response.data);
+        const { data, code } = response.data;
         if (code === ResultEnum.SUCCESS) {
           const ex = 7 * 24 * 60 * 60;
-          storage.set(ACCESS_TOKEN, result.token, ex);
-          storage.set(CURRENT_USER, result, ex);
+          storage.set(ACCESS_TOKEN, data.token, ex);
+          storage.set(CURRENT_USER, data.user, ex);
           storage.set(IS_LOCKSCREEN, false);
-          this.setToken(result.token);
-          this.setUserInfo(result);
+          this.setToken(data.token);
+          this.setUserInfo(data.user);
         }
         return Promise.resolve(response);
       } catch (e) {

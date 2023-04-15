@@ -198,3 +198,8 @@ export class VAxios {
       this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 }
+
+export const service = axios.create({
+  baseURL: 'http://localhost:8080/lostandfound',
+  timeout: 10000,
+});
