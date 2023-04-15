@@ -27,6 +27,14 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
+        path: 'user-list',
+        name: 'user-list',
+        meta: {
+          title: '用户列表',
+        },
+        component: () => import('@/views/list/basicList/index.vue'),
+      },
+      {
         path: 'basic-list',
         name: 'basic-list',
         meta: {

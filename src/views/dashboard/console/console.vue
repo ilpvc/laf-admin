@@ -42,7 +42,7 @@
             <div class="flex justify-between">
               <n-skeleton v-if="loading" text :repeat="2" />
               <template v-else>
-                <div class="text-sn"> 总访问量： </div>
+                <div class="text-sn"> 总访问量：</div>
                 <div class="text-sn">
                   <CountTo :startVal="1" :endVal="visits.amount" />
                 </div>
@@ -53,41 +53,43 @@
       </n-grid-item>
       <n-grid-item>
         <NCard
-          title="销售额"
+          title="发布帖子数"
           :segmented="{ content: true, footer: true }"
           size="small"
           :bordered="false"
         >
           <template #header-extra>
-            <n-tag type="info">周</n-tag>
+            <n-tag type="success">日</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
             <CountTo
               v-else
-              prefix="￥"
+              prefix=""
               :startVal="1"
               :endVal="saleroom.weekSaleroom"
               class="text-3xl"
             />
           </div>
           <div class="py-2 px-2 flex justify-between">
-            <div class="text-sn flex-1">
+            <div class="text-sn flex-1" style="height: 15px">
+              <!--
               <n-progress
                 type="line"
                 :percentage="saleroom.degree"
                 :indicator-placement="'inside'"
                 processing
               />
+              -->
             </div>
           </div>
           <template #footer>
             <div class="flex justify-between">
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
-                <div class="text-sn"> 总销售额： </div>
+                <div class="text-sn"> 总贴数：</div>
                 <div class="text-sn">
-                  <CountTo prefix="￥" :startVal="1" :endVal="saleroom.amount" />
+                  <CountTo :startVal="1" :endVal="saleroom.amount" />
                 </div>
               </template>
             </div>
@@ -96,13 +98,13 @@
       </n-grid-item>
       <n-grid-item>
         <NCard
-          title="订单量"
+          title="找回数"
           :segmented="{ content: true, footer: true }"
           size="small"
           :bordered="false"
         >
           <template #header-extra>
-            <n-tag type="warning">周</n-tag>
+            <n-tag type="info">周</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
@@ -134,9 +136,9 @@
             <div class="flex justify-between">
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
-                <div class="text-sn"> 转化率： </div>
+                <div class="text-sn"> 总数量：</div>
                 <div class="text-sn">
-                  <CountTo :startVal="1" suffix="%" :endVal="orderLarge.amount" />
+                  <CountTo :startVal="1" :endVal="orderLarge.amount" />
                 </div>
               </template>
             </div>
@@ -145,13 +147,13 @@
       </n-grid-item>
       <n-grid-item>
         <NCard
-          title="成交额"
+          title="商品兑换数"
           :segmented="{ content: true, footer: true }"
           size="small"
           :bordered="false"
         >
           <template #header-extra>
-            <n-tag type="error">月</n-tag>
+            <n-tag type="info">周</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
@@ -183,9 +185,9 @@
             <div class="flex justify-between">
               <n-skeleton v-if="loading" :width="100" size="medium" />
               <template v-else>
-                <div class="text-sn"> 总成交额： </div>
+                <div class="text-sn"> 总兑换数：</div>
                 <div class="text-sn">
-                  <CountTo prefix="￥" :startVal="1" :endVal="volume.amount" />
+                  <CountTo :startVal="1" :endVal="volume.amount" />
                 </div>
               </template>
             </div>
@@ -195,30 +197,30 @@
     </n-grid>
 
     <!--导航卡片-->
-    <div class="mt-4">
-      <n-grid cols="1 s:2 m:3 l:8 xl:8 2xl:8" responsive="screen" :x-gap="16" :y-gap="8">
-        <n-grid-item v-for="(item, index) in iconList" :key="index">
-          <NCard content-style="padding-top: 0;" size="small" :bordered="false">
-            <template #footer>
-              <n-skeleton v-if="loading" size="medium" />
-              <div class="cursor-pointer" v-else>
-                <p class="flex justify-center">
-                  <span>
-                    <n-icon :size="item.size" class="flex-1" :color="item.color">
-                      <component :is="item.icon" v-on="item.eventObject || {}" />
-                    </n-icon>
-                  </span>
-                </p>
-                <p class="flex justify-center"
-                  ><span>{{ item.title }}</span></p
-                >
-              </div>
-            </template>
-          </NCard>
-        </n-grid-item>
-      </n-grid>
-    </div>
-
+    <!-- <div class="mt-4">
+       <n-grid cols="1 s:2 m:3 l:8 xl:8 2xl:8" responsive="screen" :x-gap="16" :y-gap="8">
+         <n-grid-item v-for="(item, index) in iconList" :key="index">
+           <NCard content-style="padding-top: 0;" size="small" :bordered="false">
+             <template #footer>
+               <n-skeleton v-if="loading" size="medium" />
+               <div class="cursor-pointer" v-else>
+                 <p class="flex justify-center">
+                   <span>
+                     <n-icon :size="item.size" class="flex-1" :color="item.color">
+                       <component :is="item.icon" v-on="item.eventObject || {}" />
+                     </n-icon>
+                   </span>
+                 </p>
+                 <p class="flex justify-center"
+                   ><span>{{ item.title }}</span></p
+                 >
+               </div>
+             </template>
+           </NCard>
+         </n-grid-item>
+       </n-grid>
+     </div>
+     -->
     <!--访问量 | 流量趋势-->
     <VisiTab />
   </div>

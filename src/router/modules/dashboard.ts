@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/dashboard/console',
     component: Layout,
     meta: {
-      title: 'Dashboard',
+      title: '控制面板',
       icon: renderIcon(DashboardOutlined),
       permissions: ['dashboard_console', 'dashboard_console', 'dashboard_workplace'],
       sort: 0,
@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'console',
         name: `${routeName}_console`,
         meta: {
-          title: '主控台',
+          title: '控制面板',
           permissions: ['dashboard_console'],
           affix: true,
         },
@@ -47,16 +47,16 @@ const routes: Array<RouteRecordRaw> = [
       //   },
       //   component: () => import('@/views/dashboard/monitor/monitor.vue')
       // },
-      {
-        path: 'workplace',
-        name: `${routeName}_workplace`,
-        meta: {
-          title: '工作台',
-          keepAlive: true,
-          permissions: ['dashboard_workplace'],
-        },
-        component: () => import('@/views/dashboard/workplace/workplace.vue'),
-      },
+      // {
+      //   path: 'workplace',
+      //   name: `${routeName}_workplace`,
+      //   meta: {
+      //     title: '工作台',
+      //     keepAlive: true,
+      //     permissions: ['dashboard_workplace'],
+      //   },
+      //   component: () => import('@/views/dashboard/workplace/workplace.vue'),
+      // },
     ],
   },
 ];

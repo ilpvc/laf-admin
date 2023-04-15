@@ -16,6 +16,9 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   fullPath?: string;
 }
 
+class AppRouteRecordRawImpl implements AppRouteRecordRaw {
+}
+
 export interface Meta {
   // 名称
   title: string;

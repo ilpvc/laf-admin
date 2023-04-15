@@ -10,6 +10,8 @@ dist
 /docs
 .husky
 .local
+.vue
+.ts
 /bin
 Dockerfile
 components.d.ts
