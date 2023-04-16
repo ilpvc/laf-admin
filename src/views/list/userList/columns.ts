@@ -41,7 +41,14 @@ export const columns = [
   {
     title: "性别",
     key: "gender",
-    width: 50
+    width: 50,
+    render(row) {
+      return h(
+        'span',
+        {},
+        row.gender===1? '男':'女' || '无'
+      );
+    }
   },
   {
     title: "QQ",
