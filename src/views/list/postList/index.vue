@@ -71,8 +71,9 @@
   import { PlusOutlined } from '@vicons/antd';
   import { useRouter } from 'vue-router';
   import { type FormRules } from 'naive-ui';
-  import { pageUserCondition } from '@/api/user/user';
+  import { getAllUser, pageUserCondition } from "@/api/user/user";
   import { pagePost, pagePostCondition } from '@/api/post/post';
+  import { useAllUserStore } from "@/store/modules/allUser";
 
   const rules: FormRules = {
     name: {
@@ -297,9 +298,13 @@
     showModal.value = true;
   }
 
+  const allUserStore = useAllUserStore()
   const loadDataTable = async () => {
     let newVar1 = await pagePost(1, 8);
     const list = newVar1.data.data.list.records;
+    let res = await getAllUser();
+    allUserStore.setAllUser(res.data.data.list)
+    allUserStore.getAllUserMap.get(1006)
     return { list: list, page: 1, pagesize: 8 };
   };
 

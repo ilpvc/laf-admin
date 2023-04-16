@@ -8,7 +8,7 @@ http.configAxios({
 });
 
 export function getAllUser() {
-  return http.request({
+  return service.request({
     url: `/user/`,
     method: 'get',
     params: {},

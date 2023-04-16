@@ -1,6 +1,8 @@
 import { h } from 'vue';
 import { NTag } from 'naive-ui';
+import {useAllUserStore} from "@/store/modules/allUser";
 
+const allUserStore = useAllUserStore()
 export const columns = [
   {
     title: 'id',
@@ -43,12 +45,20 @@ export const columns = [
   {
     title: '浏览量',
     key: 'count',
-    width: 80,
+    width: 50,
   },
   {
     title: '发帖人',
     key: 'userId',
-    width: 50,
+    width: 100,
+    render(row) {
+      return h(
+        'i',
+        {
+        },
+        allUserStore.getAllUserMap.get(row.userId)||"不存在"
+      );
+    },
   },
   {
     title: '状态',
@@ -57,9 +67,9 @@ export const columns = [
       return h(
         NTag,
         {
-          type: row.status === 1 ? 'success' : 'error',
+          type: row.status === 1 ? 'success' : row.status === 2? 'info':row.status === 3?'warning':'error',
         },
-        row.status === 1 ? '正常' : '封禁'
+        row.status === 1 ? '正常' : row.status === 2? '待审核':row.status === 3? '已删除':'已禁用'
       );
     },
     width: 100,
