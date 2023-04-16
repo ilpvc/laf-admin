@@ -24,6 +24,7 @@ const routes: Array<RouteRecordRaw> = [
       title: '列表页面',
       icon: renderIcon(TableOutlined),
       sort: 2,
+      isAuth: true,
     },
     children: [
       {
@@ -33,6 +34,14 @@ const routes: Array<RouteRecordRaw> = [
           title: '用户列表',
         },
         component: () => import('@/views/list/userList/index.vue'),
+      },
+      {
+        path: 'post-list',
+        name: 'post-list',
+        meta: {
+          title: '帖子列表',
+        },
+        component: () => import('@/views/list/postList/index.vue'),
       },
       {
         path: 'basic-list',

@@ -8,7 +8,6 @@ import { PageEnum } from '@/enums/pageEnum';
 import { ErrorPageRoute } from '@/router/base';
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN;
-
 const whitePathList = [LOGIN_PATH]; // no redirect whitelist
 
 export function createRouterGuards(router: Router) {
@@ -21,6 +20,22 @@ export function createRouterGuards(router: Router) {
       next(PageEnum.BASE_HOME);
       return;
     }
+
+    // if (to.meta.isAuth) {
+    //   console.log(storage.get(ACCESS_TOKEN));
+    //   if (storage.get(ACCESS_TOKEN) !== undefined) {
+    //     next();
+    //   } else {
+    //     if (confirm('你还没有登录或者登录信息过期，请重新登录')) {
+    //       // next(PageEnum.BASE_LOGIN);
+    //       router.push({
+    //         path: '/login',
+    //       });
+    //     }
+    //   }
+    // } else {
+    //   next();
+    // }
 
     // Whitelist can be directly entered
     if (whitePathList.includes(to.path as PageEnum)) {
@@ -47,6 +62,7 @@ export function createRouterGuards(router: Router) {
           redirect: to.path,
         };
       }
+      confirm('你还没有登录，禁止访问');
       next(redirectData);
       return;
     }

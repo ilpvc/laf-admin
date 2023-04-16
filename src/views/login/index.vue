@@ -16,8 +16,8 @@
           :model="formInline"
           :rules="rules"
         >
-          <n-form-item path="username">
-            <n-input v-model:value="formInline.username" placeholder="请输入用户名">
+          <n-form-item path="nickname">
+            <n-input v-model:value="formInline.nickname" placeholder="请输入用户名">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -25,6 +25,16 @@
               </template>
             </n-input>
           </n-form-item>
+          <n-form-item path="email">
+            <n-input v-model:value="formInline.email" placeholder="请输入邮箱">
+              <template #prefix>
+                <n-icon size="18" color="#808695">
+                  <PersonOutline />
+                </n-icon>
+              </template>
+            </n-input>
+          </n-form-item>
+
           <n-form-item path="password">
             <n-input
               v-model:value="formInline.password"
@@ -54,6 +64,7 @@
               登录
             </n-button>
           </n-form-item>
+          <!--
           <n-form-item class="default-color">
             <div class="flex view-account-other">
               <div class="flex-initial">
@@ -78,6 +89,7 @@
               </div>
             </div>
           </n-form-item>
+          -->
         </n-form>
       </div>
     </div>
@@ -90,7 +102,7 @@
   import { useUserStore } from '@/store/modules/user';
   import { useMessage } from 'naive-ui';
   import { ResultEnum } from '@/enums/httpEnum';
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
+  import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5';
   import { PageEnum } from '@/enums/pageEnum';
   import { websiteConfig } from '@/config/website.config';
   import { LoginParams } from '@/interface/ApiInterface';
@@ -107,13 +119,15 @@
   const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME;
 
   const formInline = reactive({
-    username: 'admin',
-    password: '123456',
+    nickname: '',
+    email: '',
+    password: '',
     isCaptcha: true,
   });
 
   const rules = {
-    username: { required: true, message: '请输入用户名', trigger: 'blur' },
+    nickname: { required: true, message: '请输入用户名', trigger: 'blur' },
+    email: { required: true, message: '请输入邮箱', trigger: 'blur' },
     password: { required: true, message: '请输入密码', trigger: 'blur' },
   };
 
@@ -126,29 +140,39 @@
     e.preventDefault();
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { username, password } = formInline;
+        const { nickname, password, email } = formInline;
         message.loading('登录中...');
         loading.value = true;
 
-        const params: FormState = {
-          username,
+        const params: LoginParams = {
+          nickName: nickname,
           password,
+          email,
         };
 
         try {
-          const { code, message: msg } = await userStore.login({
-            email: params.username,
+          const res = await userStore.login({
+            nickName: params.nickName,
+            email: params.email,
             password: params.password,
           });
           message.destroyAll();
-          if (code == ResultEnum.SUCCESS) {
+          if (res?.data.code == ResultEnum.SUCCESS) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
             message.success('登录成功，即将进入系统');
             if (route.name === LOGIN_NAME) {
               await router.replace('/');
             } else await router.replace(toPath);
           } else {
-            message.info(msg || '登录失败');
+            message.info(res.data.message || '登录失败');
+          }
+        } catch (e) {
+          if (e.response.status === 403) {
+            message.destroyAll();
+            message.error('账号不存在');
+          } else if (e.response.status === 401) {
+            message.destroyAll();
+            message.error(e.message);
           }
         } finally {
           loading.value = false;

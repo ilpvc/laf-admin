@@ -72,31 +72,31 @@
       </n-breadcrumb>
     </div>
     <div class="layout-header-right">
-      <div
-        class="layout-header-trigger layout-header-trigger-min"
-        v-for="item in iconList"
-        :key="item.icon.name"
-      >
-        <n-tooltip placement="bottom">
-          <template #trigger>
-            <n-icon size="18">
-              <component :is="item.icon" v-on="item.eventObject || {}" />
-            </n-icon>
-          </template>
-          <span>{{ item.tips }}</span>
-        </n-tooltip>
-      </div>
+      <!--      <div-->
+      <!--        class="layout-header-trigger layout-header-trigger-min"-->
+      <!--        v-for="item in iconList"-->
+      <!--        :key="item.icon.name"-->
+      <!--      >-->
+      <!--        <n-tooltip placement="bottom">-->
+      <!--          <template #trigger>-->
+      <!--            <n-icon size="18">-->
+      <!--              <component :is="item.icon" v-on="item.eventObject || {}" />-->
+      <!--            </n-icon>-->
+      <!--          </template>-->
+      <!--          <span>{{ item.tips }}</span>-->
+      <!--        </n-tooltip>-->
+      <!--      </div>-->
       <!--切换全屏-->
-      <div class="layout-header-trigger layout-header-trigger-min">
-        <n-tooltip placement="bottom">
-          <template #trigger>
-            <n-icon size="18">
-              <component :is="fullscreenIcon" @click="toggleFullScreen" />
-            </n-icon>
-          </template>
-          <span>全屏</span>
-        </n-tooltip>
-      </div>
+      <!--      <div class="layout-header-trigger layout-header-trigger-min">-->
+      <!--        <n-tooltip placement="bottom">-->
+      <!--          <template #trigger>-->
+      <!--            <n-icon size="18">-->
+      <!--              <component :is="fullscreenIcon" @click="toggleFullScreen" />-->
+      <!--            </n-icon>-->
+      <!--          </template>-->
+      <!--          <span>全屏</span>-->
+      <!--        </n-tooltip>-->
+      <!--      </div>-->
       <!-- 个人中心 -->
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" @select="avatarSelect" :options="avatarOptions">
@@ -111,16 +111,16 @@
         </n-dropdown>
       </div>
       <!--设置-->
-      <div class="layout-header-trigger layout-header-trigger-min" @click="openSetting">
-        <n-tooltip placement="bottom-end">
-          <template #trigger>
-            <n-icon size="18" style="font-weight: bold">
-              <SettingOutlined />
-            </n-icon>
-          </template>
-          <span>项目配置</span>
-        </n-tooltip>
-      </div>
+      <!--      <div class="layout-header-trigger layout-header-trigger-min" @click="openSetting">-->
+      <!--        <n-tooltip placement="bottom-end">-->
+      <!--          <template #trigger>-->
+      <!--            <n-icon size="18" style="font-weight: bold">-->
+      <!--              <SettingOutlined />-->
+      <!--            </n-icon>-->
+      <!--          </template>-->
+      <!--          <span>项目配置</span>-->
+      <!--        </n-tooltip>-->
+      <!--      </div>-->
     </div>
   </div>
   <!--项目配置-->
@@ -276,24 +276,24 @@
 
       // 图标列表
       const iconList = [
-        {
-          icon: 'SearchOutlined',
-          tips: '搜索',
-        },
-        {
-          icon: 'GithubOutlined',
-          tips: 'github',
-          eventObject: {
-            click: () => window.open('https://github.com/jekip/naive-ui-admin'),
-          },
-        },
-        {
-          icon: 'LockOutlined',
-          tips: '锁屏',
-          eventObject: {
-            click: () => useLockscreen.setLock(true),
-          },
-        },
+        // {
+        //   icon: 'SearchOutlined',
+        //   tips: '搜索',
+        // },
+        // {
+        //   icon: 'GithubOutlined',
+        //   tips: 'github',
+        //   eventObject: {
+        //     click: () => window.open('https://github.com/jekip/naive-ui-admin'),
+        //   },
+        // },
+        // {
+        //   icon: 'LockOutlined',
+        //   tips: '锁屏',
+        //   eventObject: {
+        //     click: () => useLockscreen.setLock(true),
+        //   },
+        // },
       ];
       const avatarOptions = [
         {
