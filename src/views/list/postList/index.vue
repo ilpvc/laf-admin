@@ -299,13 +299,12 @@
   }
 
   const allUserStore = useAllUserStore()
-  const loadDataTable = async () => {
-    let newVar1 = await pagePost(1, 8);
-    const list = newVar1.data.data.list.records;
+  const loadDataTable = async (resp) => {
+    let newVar1 = await pagePost(resp.page,resp.pageSize);
+    const list = newVar1.data.data.list;
     let res = await getAllUser();
     allUserStore.setAllUser(res.data.data.list)
-    allUserStore.getAllUserMap.get(1006)
-    return { list: list, page: 1, pagesize: 8 };
+    return { list: list.records, pageNo: resp.page, pageSize: resp.pageSize ,pageCount: list.pages };
   };
 
   // const loadDataTable =async ()=>{

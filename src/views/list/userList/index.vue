@@ -57,6 +57,8 @@
           <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
         </n-space>
       </template>
+
+
     </n-modal>
   </n-card>
 </template>
@@ -244,9 +246,11 @@ function addTable() {
 }
 
 const loadDataTable = async (res) => {
-  let newVar1 = await pageUserCondition({}, { pageNo: 1, pageCount: 8 });
-  console.log(newVar1.data.data.items.records);
-  return { list: newVar1.data.data.items.records, page: 1, pagesize: 8 };
+  let newVar1 = await pageUserCondition({}, { pageNo: res.page, pageCount: res.pageSize });
+  const items = newVar1.data.data.items
+  console.log(res);
+  console.log(items);
+  return { list: items.records, pageNo: res.page, pageSize: res.pageSize ,pageCount: items.pages };
 };
 
 // const loadDataTable =async ()=>{
