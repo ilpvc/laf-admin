@@ -13,38 +13,38 @@
             <n-tag type="success">日</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
-            <n-skeleton v-if="loading" :width="100" size="medium" />
-            <CountTo v-else :startVal="1" :endVal="visits.dayVisits" class="text-3xl" />
+            <n-skeleton v-if="loading" :width="100" size="medium"/>
+            <CountTo v-else :startVal="1" :endVal="visits.dayVisits" class="text-3xl"/>
           </div>
           <div class="py-1 px-1 flex justify-between">
             <div class="text-sn">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 日同比
-                <CountTo :startVal="1" suffix="%" :endVal="visits.rise" />
+                <CountTo :startVal="1" suffix="%" :endVal="visits.rise"/>
                 <n-icon size="12" color="#00ff6f">
-                  <CaretUpOutlined />
+                  <CaretUpOutlined/>
                 </n-icon>
               </template>
             </div>
             <div class="text-sn">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 周同比
-                <CountTo :startVal="1" suffix="%" :endVal="visits.decline" />
+                <CountTo :startVal="1" suffix="%" :endVal="visits.decline"/>
                 <n-icon size="12" color="#ffde66">
-                  <CaretDownOutlined />
+                  <CaretDownOutlined/>
                 </n-icon>
               </template>
             </div>
           </div>
           <template #footer>
             <div class="flex justify-between">
-              <n-skeleton v-if="loading" text :repeat="2" />
+              <n-skeleton v-if="loading" text :repeat="2"/>
               <template v-else>
                 <div class="text-sn"> 总访问量：</div>
                 <div class="text-sn">
-                  <CountTo :startVal="1" :endVal="visits.amount" />
+                  <CountTo :startVal="1" :endVal="visits.amount"/>
                 </div>
               </template>
             </div>
@@ -62,12 +62,12 @@
             <n-tag type="success">日</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
-            <n-skeleton v-if="loading" :width="100" size="medium" />
+            <n-skeleton v-if="loading" :width="100" size="medium"/>
             <CountTo
               v-else
               prefix=""
               :startVal="1"
-              :endVal="saleroom.weekSaleroom"
+              :endVal="saleroom.now"
               class="text-3xl"
             />
           </div>
@@ -85,11 +85,11 @@
           </div>
           <template #footer>
             <div class="flex justify-between">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 <div class="text-sn"> 总贴数：</div>
                 <div class="text-sn">
-                  <CountTo :startVal="1" :endVal="saleroom.amount" />
+                  <CountTo :startVal="1" :endVal="saleroom.all"/>
                 </div>
               </template>
             </div>
@@ -107,38 +107,38 @@
             <n-tag type="info">周</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
-            <n-skeleton v-if="loading" :width="100" size="medium" />
-            <CountTo v-else :startVal="1" :endVal="orderLarge.weekLarge" class="text-3xl" />
+            <n-skeleton v-if="loading" :width="100" size="medium"/>
+            <CountTo v-else :startVal="1" :endVal="orderLarge.weekLarge" class="text-3xl"/>
           </div>
           <div class="py-1 px-1 flex justify-between">
             <div class="text-sn">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 日同比
-                <CountTo :startVal="1" suffix="%" :endVal="orderLarge.rise" />
+                <CountTo :startVal="1" suffix="%" :endVal="orderLarge.rise"/>
                 <n-icon size="12" color="#00ff6f">
-                  <CaretUpOutlined />
+                  <CaretUpOutlined/>
                 </n-icon>
               </template>
             </div>
             <div class="text-sn">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 周同比
-                <CountTo :startVal="1" suffix="%" :endVal="orderLarge.rise" />
+                <CountTo :startVal="1" suffix="%" :endVal="orderLarge.rise"/>
                 <n-icon size="12" color="#ffde66">
-                  <CaretDownOutlined />
+                  <CaretDownOutlined/>
                 </n-icon>
               </template>
             </div>
           </div>
           <template #footer>
             <div class="flex justify-between">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 <div class="text-sn"> 总数量：</div>
                 <div class="text-sn">
-                  <CountTo :startVal="1" :endVal="orderLarge.amount" />
+                  <CountTo :startVal="1" :endVal="orderLarge.amount"/>
                 </div>
               </template>
             </div>
@@ -156,38 +156,38 @@
             <n-tag type="info">周</n-tag>
           </template>
           <div class="py-1 px-1 flex justify-between">
-            <n-skeleton v-if="loading" :width="100" size="medium" />
-            <CountTo v-else prefix="￥" :startVal="1" :endVal="volume.weekLarge" class="text-3xl" />
+            <n-skeleton v-if="loading" :width="100" size="medium"/>
+            <CountTo v-else prefix="￥" :startVal="1" :endVal="volume.weekLarge" class="text-3xl"/>
           </div>
           <div class="py-1 px-1 flex justify-between">
             <div class="text-sn">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 月同比
-                <CountTo :startVal="1" suffix="%" :endVal="volume.rise" />
+                <CountTo :startVal="1" suffix="%" :endVal="volume.rise"/>
                 <n-icon size="12" color="#00ff6f">
-                  <CaretUpOutlined />
+                  <CaretUpOutlined/>
                 </n-icon>
               </template>
             </div>
             <div class="text-sn">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 月同比
-                <CountTo :startVal="1" suffix="%" :endVal="volume.decline" />
+                <CountTo :startVal="1" suffix="%" :endVal="volume.decline"/>
                 <n-icon size="12" color="#ffde66">
-                  <CaretDownOutlined />
+                  <CaretDownOutlined/>
                 </n-icon>
               </template>
             </div>
           </div>
           <template #footer>
             <div class="flex justify-between">
-              <n-skeleton v-if="loading" :width="100" size="medium" />
+              <n-skeleton v-if="loading" :width="100" size="medium"/>
               <template v-else>
                 <div class="text-sn"> 总兑换数：</div>
                 <div class="text-sn">
-                  <CountTo :startVal="1" :endVal="volume.amount" />
+                  <CountTo :startVal="1" :endVal="volume.amount"/>
                 </div>
               </template>
             </div>
@@ -222,117 +222,132 @@
      </div>
      -->
     <!--访问量 | 流量趋势-->
-    <VisiTab />
+    <VisiTab/>
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
-  import { getConsoleInfo } from '@/api/dashboard/console';
-  import VisiTab from './components/VisiTab.vue';
-  import { CountTo } from '@/components/CountTo/index';
-  import {
-    CaretUpOutlined,
-    CaretDownOutlined,
-    UsergroupAddOutlined,
-    BarChartOutlined,
-    ShoppingCartOutlined,
-    AccountBookOutlined,
-    CreditCardOutlined,
-    MailOutlined,
-    TagsOutlined,
-    SettingOutlined,
-  } from '@vicons/antd';
+import {ref, onMounted} from 'vue';
+import {getConsoleInfo} from '@/api/dashboard/console';
+import VisiTab from './components/VisiTab.vue';
+import {CountTo} from '@/components/CountTo/index';
+import {
+  CaretUpOutlined,
+  CaretDownOutlined,
+  UsergroupAddOutlined,
+  BarChartOutlined,
+  ShoppingCartOutlined,
+  AccountBookOutlined,
+  CreditCardOutlined,
+  MailOutlined,
+  TagsOutlined,
+  SettingOutlined,
+} from '@vicons/antd';
+import {getQuestionLikeKey} from "@/api/attribute/attribute";
+import {AttributeQuery} from "@/interface/ApiInterface";
 
-  const loading = ref(true);
-  const visits = ref<any>({});
-  const saleroom = ref<any>({});
-  const orderLarge = ref<any>({});
-  const volume = ref({});
+const loading = ref(true);
+const visits = ref<any>({});
+const saleroom = ref<any>({});
+const orderLarge = ref<any>({});
+const volume = ref({});
 
-  // 图标列表
-  const iconList = [
-    {
-      icon: UsergroupAddOutlined,
-      size: '32',
-      title: '用户',
-      color: '#69c0ff',
-      eventObject: {
-        click: () => {},
+// 图标列表
+const iconList = [
+  {
+    icon: UsergroupAddOutlined,
+    size: '32',
+    title: '用户',
+    color: '#69c0ff',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: BarChartOutlined,
-      size: '32',
-      title: '分析',
-      color: '#69c0ff',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: BarChartOutlined,
+    size: '32',
+    title: '分析',
+    color: '#69c0ff',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: ShoppingCartOutlined,
-      size: '32',
-      title: '商品',
-      color: '#ff9c6e',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: ShoppingCartOutlined,
+    size: '32',
+    title: '商品',
+    color: '#ff9c6e',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: AccountBookOutlined,
-      size: '32',
-      title: '订单',
-      color: '#b37feb',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: AccountBookOutlined,
+    size: '32',
+    title: '订单',
+    color: '#b37feb',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: CreditCardOutlined,
-      size: '32',
-      title: '票据',
-      color: '#ffd666',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: CreditCardOutlined,
+    size: '32',
+    title: '票据',
+    color: '#ffd666',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: MailOutlined,
-      size: '32',
-      title: '消息',
-      color: '#5cdbd3',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: MailOutlined,
+    size: '32',
+    title: '消息',
+    color: '#5cdbd3',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: TagsOutlined,
-      size: '32',
-      title: '标签',
-      color: '#ff85c0',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: TagsOutlined,
+    size: '32',
+    title: '标签',
+    color: '#ff85c0',
+    eventObject: {
+      click: () => {
       },
     },
-    {
-      icon: SettingOutlined,
-      size: '32',
-      title: '配置',
-      color: '#ffc069',
-      eventObject: {
-        click: () => {},
+  },
+  {
+    icon: SettingOutlined,
+    size: '32',
+    title: '配置',
+    color: '#ffc069',
+    eventObject: {
+      click: () => {
       },
     },
-  ];
+  },
+];
 
-  onMounted(async () => {
-    const data = await getConsoleInfo();
-    visits.value = data.visits;
-    saleroom.value = data.saleroom;
-    orderLarge.value = data.orderLarge;
-    volume.value = data.volume;
-    loading.value = false;
-  });
+onMounted(async () => {
+  let res = await getQuestionLikeKey("complete");
+  let count = res.data.data.list
+  const now:AttributeQuery = count[0]
+  const all:AttributeQuery = count[1]
+
+  const data = await getConsoleInfo();
+  visits.value = data.visits;
+  saleroom.value = {now:now.numberValue,all:all.numberValue};
+  orderLarge.value = data.orderLarge;
+  volume.value = data.volume;
+  loading.value = false;
+});
 </script>
 
 <style lang="less" scoped></style>
