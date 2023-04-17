@@ -237,9 +237,9 @@ function handleEdit(record: Recordable) {
 function handleDelete(record: Recordable) {
   dialog.warning({
     title: '警告',
-    content: '你确定？',
+    content: '确认删除',
     positiveText: '确定',
-    negativeText: '不确定',
+    negativeText: '取消',
     onPositiveClick: async () => {
       await deleteTasks(record.taskId);
       reloadTable()
