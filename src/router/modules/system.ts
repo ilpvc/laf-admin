@@ -21,19 +21,19 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/system/menu',
     component: Layout,
     meta: {
-      title: '系统设置',
+      title: '权限管理',
       icon: renderIcon(OptionsSharp),
       sort: 1,
     },
     children: [
-      {
-        path: 'menu',
-        name: 'system_menu',
-        meta: {
-          title: '菜单权限管理',
-        },
-        component: () => import('@/views/system/menu/menu.vue'),
-      },
+      // {
+      //   path: 'menu',
+      //   name: 'system_menu',
+      //   meta: {
+      //     title: '菜单权限管理',
+      //   },
+      //   component: () => import('@/views/system/menu/menu.vue'),
+      // },
       {
         path: 'role',
         name: 'system_role',

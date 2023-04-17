@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/list/basic-list',
     component: Layout,
     meta: {
-      title: '列表页面',
+      title: '数据列表',
       icon: renderIcon(TableOutlined),
       sort: 2,
       isAuth: true,
@@ -44,23 +44,31 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/list/postList/index.vue'),
       },
       {
-        path: 'basic-list',
-        name: 'basic-list',
+        path: 'task-list',
+        name: 'task-list',
         meta: {
-          title: '基础列表',
+          title: '任务列表',
         },
-        component: () => import('@/views/list/basicList/index.vue'),
+        component: () => import('@/views/list/taskList/index.vue'),
       },
-      {
-        path: 'basic-info/:id?',
-        name: 'basic-info',
-        meta: {
-          title: '基础详情',
-          hidden: true,
-          activeMenu: 'basic-list',
-        },
-        component: () => import('@/views/list/basicList/info.vue'),
-      },
+      // {
+      //   path: 'basic-list',
+      //   name: 'basic-list',
+      //   meta: {
+      //     title: '基础列表',
+      //   },
+      //   component: () => import('@/views/list/basicList/index.vue'),
+      // },
+      // {
+      //   path: 'basic-info/:id?',
+      //   name: 'basic-info',
+      //   meta: {
+      //     title: '基础详情',
+      //     hidden: true,
+      //     activeMenu: 'basic-list',
+      //   },
+      //   component: () => import('@/views/list/basicList/info.vue'),
+      // },
     ],
   },
 ];

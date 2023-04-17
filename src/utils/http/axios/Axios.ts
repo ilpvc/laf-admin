@@ -7,6 +7,7 @@ import { cloneDeep } from 'lodash-es';
 
 import type { RequestOptions, CreateAxiosOptions, Result, UploadFileParams } from './types';
 import { ContentTypeEnum } from '@/enums/httpEnum';
+import {useUserStoreWidthOut} from "@/store/modules/user";
 
 export * from './axiosTransform';
 
@@ -199,7 +200,20 @@ export class VAxios {
   }
 }
 
-export const service = axios.create({
+const service = axios.create({
   baseURL: 'http://localhost:8080/lostandfound',
   timeout: 10000,
 });
+
+service.interceptors.request.use((config: AxiosRequestConfig) => {
+  const userStore = useUserStoreWidthOut();
+  const token = userStore.getToken;
+  if (token) {
+    config.headers['Token'] = token
+    // config.headers['Content-Type'] = 'application/json'
+  }
+  return config
+}, undefined);
+
+
+export {service}

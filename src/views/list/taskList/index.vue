@@ -2,7 +2,7 @@
   <n-card :bordered="false" class="proCard">
     <BasicForm @register="register" @submit="handleSubmit" @reset="handleReset">
       <template #statusSlot="{ model, field }">
-        <n-input v-model:value="model[field]" />
+        <n-input v-model:value="model[field]"/>
       </template>
     </BasicForm>
 
@@ -19,7 +19,7 @@
         <n-button type="primary" @click="addTable">
           <template #icon>
             <n-icon>
-              <PlusOutlined />
+              <PlusOutlined/>
             </n-icon>
           </template>
           新建
@@ -40,15 +40,16 @@
         :label-width="80"
         class="py-4"
       >
-        <n-form-item label="名称" path="name">
-          <n-input placeholder="请输入名称" v-model:value="formParams.name" />
+        <n-form-item label="任务名称" path="taskName">
+          <n-input placeholder="请输入任务名称" v-model:value="formParams.taskName"/>
         </n-form-item>
-        <n-form-item label="地址" path="address">
-          <n-input type="textarea" placeholder="请输入地址" v-model:value="formParams.address" />
+        <n-form-item label="积分" path="points">
+          <n-input-number placeholder="任务积分" v-model:value="formParams.points"/>
         </n-form-item>
-        <n-form-item label="日期" path="date">
-          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />
+        <n-form-item label="描述" path="description">
+          <n-input type="textarea" placeholder="任务描述" v-model:value="formParams.description"/>
         </n-form-item>
+
       </n-form>
 
       <template #action>
@@ -64,107 +65,54 @@
 </template>
 
 <script lang="ts" setup>
-import { h, reactive, ref } from "vue";
+import {h, reactive, ref, unref} from "vue";
 // import { useMessage } from 'naive-ui';
-import { BasicTable, TableAction } from "@/components/Table";
-import { BasicForm, FormSchema, useForm } from "@/components/Form/index";
-import { getTableList } from "@/api/table/list";
-import { columns } from "./columns";
-import { PlusOutlined } from "@vicons/antd";
-import { useRouter } from "vue-router";
-import { type FormRules } from "naive-ui";
-import { pageUserCondition } from "@/api/user/user";
+import {BasicTable, TableAction} from "@/components/Table";
+import {BasicForm, FormSchema, useForm} from "@/components/Form/index";
+import {columns} from "./columns";
+import {PlusOutlined} from "@vicons/antd";
+import {useRouter} from "vue-router";
+import {type FormRules, useDialog} from "naive-ui";
+import {addTasks, deleteTasks, pageTask, updateTasks} from "@/api/task/task";
+import {Tasks} from "@/interface/ApiInterface";
 
 const rules: FormRules = {
-  name: {
+  taskName: {
+    type: 'string',
     required: true,
-    trigger: ["blur", "input"],
-    message: "请输入名称"
+    trigger: ["blur"],
+    message: "请输入任务名称"
   },
-  address: {
-    required: true,
-    trigger: ["blur", "input"],
-    message: "请输入地址"
-  },
-  date: {
+  points: {
     type: "number",
     required: true,
+    trigger: ["blur", "input"],
+    message: "请输入积分"
+  },
+  description: {
+    required: false,
     trigger: ["blur", "change"],
-    message: "请选择日期"
+    message: ""
   }
 };
 
 const schemas: FormSchema[] = [
   {
-    field: "name",
+    field: "taskName",
     labelMessage: "支持模糊查询",
     component: "NInput",
-    label: "用户名",
+    label: "任务名",
     componentProps: {
-      placeholder: "用户名",
+      placeholder: "任务名",
       onInput: (e: any) => {
         console.log(e);
       }
     },
-    rules: [{ required: false, message: "请输入姓名", trigger: ["blur"] }]
+    rules: [{required: false, message: "请输入任务名", trigger: ["blur"]}]
   },
-  // {
-  //   field: 'mobile',
-  //   component: 'NInputNumber',
-  //   label: '手机',
-  //   componentProps: {
-  //     placeholder: '请输入手机号码',
-  //     showButton: false,
-  //     onInput: (e: any) => {
-  //       console.log(e);
-  //     },
-  //   },
-  // },
-  {
-    field: "gender",
-    component: "NSelect",
-    label: "性别",
-    componentProps: {
-      placeholder: "请选择性别",
-      options: [
-        {
-          label: "男",
-          value: 1
-        },
-        {
-          label: "女",
-          value: 2
-        }
-      ],
-      onUpdateValue: (e: any) => {
-        console.log(e);
-      }
-    }
-  },
-  {
-    field: "status",
-    component: "NSelect",
-    label: "状态",
-    //插槽
-    componentProps: {
-      placeholder: "请选择状态",
-      options: [
-        {
-          label: "正常",
-          value: 1
-        },
-        {
-          label: "封禁",
-          value: 2
-        }
-      ],
-      onUpdateValue: (e: any) => {
-        console.log(e);
-      }
-    }
-  }
-];
 
+];
+const dialog = useDialog();
 const router = useRouter();
 const formRef: any = ref(null);
 // const message = useMessage();
@@ -172,10 +120,11 @@ const actionRef = ref();
 
 const showModal = ref(false);
 const formBtnLoading = ref(false);
-const formParams = reactive({
-  name: "",
-  address: "",
-  date: null
+let formParams = ref({
+  taskId: 0,
+  taskName: "",
+  points: 0,
+  description: ''
 });
 
 const params = ref({
@@ -211,32 +160,12 @@ const actionColumn = reactive({
           auth: ["basic_list"]
         }
       ],
-      dropDownActions: [
-        {
-          label: "启用",
-          key: "enabled",
-          // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-          ifShow: () => {
-            return true;
-          }
-        },
-        {
-          label: "禁用",
-          key: "disabled",
-          ifShow: () => {
-            return true;
-          }
-        }
-      ],
-      select: (key) => {
-        window["$message"].info(`您点击了，${key} 按钮`);
-      }
     });
   }
 });
 
 const [register, {}] = useForm({
-  gridProps: { cols: "1 s:1 m:2 l:3 xl:4 2xl:4" },
+  gridProps: {cols: "1 s:1 m:2 l:3 xl:4 2xl:4"},
   labelWidth: 80,
   schemas
 });
@@ -246,11 +175,9 @@ function addTable() {
 }
 
 const loadDataTable = async (res) => {
-  let newVar1 = await pageUserCondition({}, { pageNo: res.page, pageCount: res.pageSize });
-  const items = newVar1.data.data.items
-  console.log(res);
-  console.log(items);
-  return { list: items.records, pageNo: res.page, pageSize: res.pageSize ,pageCount: items.pages };
+  let newVar1 = await pageTask(res.page, res.pageSize);
+  const items = newVar1.data.data.list
+  return {list: items.records, pageNo: res.page, pageSize: res.pageSize, pageCount: items.pages};
 };
 
 // const loadDataTable =async ()=>{
@@ -268,8 +195,17 @@ function reloadTable() {
 function confirmForm(e) {
   e.preventDefault();
   formBtnLoading.value = true;
-  formRef.value.validate((errors) => {
+  formRef.value.validate(async (errors) => {
     if (!errors) {
+      if (unref(updateOrSave)) {
+        await addTasks({
+          description: unref(formParams).description,
+          points: unref(formParams).points,
+          taskName: unref(formParams).taskName
+        })
+      } else {
+        await updateTasks({...formParams.value})
+      }
       window["$message"].success("新建成功");
       setTimeout(() => {
         showModal.value = false;
@@ -278,18 +214,42 @@ function confirmForm(e) {
     } else {
       window["$message"].error("请填写完整信息");
     }
+    updateOrSave.value=true
     formBtnLoading.value = false;
   });
 }
 
+//更新还是新增.默认为新增
+const updateOrSave = ref(true)
+
 function handleEdit(record: Recordable) {
-  console.log("点击了编辑", record);
-  router.push({ name: "basic-info", params: { id: record.id } });
+  formParams.value = {
+    taskId: record.taskId,
+    description: record.description,
+    points: record.points,
+    taskName: record.taskName
+  }
+  addTable()
+  updateOrSave.value = false
+  // router.push({name: "basic-info", params: {id: record.id}});
 }
 
 function handleDelete(record: Recordable) {
-  console.log("点击了删除", record);
-  window["$message"].info("点击了删除");
+  dialog.warning({
+    title: '警告',
+    content: '你确定？',
+    positiveText: '确定',
+    negativeText: '不确定',
+    onPositiveClick: async () => {
+      await deleteTasks(record.taskId);
+      reloadTable()
+      window["$message"].success("删除成功");
+    },
+    onNegativeClick: () => {
+      window["$message"].error("删除失败");
+    }
+  })
+
 }
 
 function handleSubmit(values: Recordable) {
