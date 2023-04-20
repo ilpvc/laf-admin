@@ -1,6 +1,6 @@
-import { http } from '@/utils/http/axios';
-import { UserQuery } from '@/interface/ApiInterface';
-import { service } from '@/utils/http/axios/Axios';
+import {http} from '@/utils/http/axios';
+import {User, UserQuery} from '@/interface/ApiInterface';
+import {service} from '@/utils/http/axios/Axios';
 
 http.configAxios({
   baseURL: 'http://localhost:8080/lostandfound',
@@ -33,10 +33,43 @@ export const pageUserCondition = (
     data: params,
   });
 
-export const pageConfig = ({ pageNo, pageCount }: { pageNo: number; pageCount: number }) =>
-  http.request({
+export const pageConfig = ({pageNo, pageCount}: { pageNo: number; pageCount: number }) =>
+  service.request({
     url: `/user/pageUser/${pageNo}/${pageCount}`,
     method: 'get',
     params: {},
     data: {},
   });
+
+export const updateUser = (params: User) =>
+  service.request({
+    url: `/user/updateUser`,
+    method: "put",
+    params: {},
+    data: params
+  });
+
+export const addUser = (params: User) =>
+  service.request({
+    url: `/user/addUser`,
+    method: "post",
+    params: {},
+    data: params
+  });
+
+export const getUserById = (id: number) =>
+  service.request({
+    url: `/user/${id}`,
+    method: "get",
+    params: {},
+    data: {}
+  });
+
+export const deleteUser = (id: number) =>
+  service.request({
+    url: `/user/${id}`,
+    method: "delete",
+    params: {},
+    data: {}
+  });
+

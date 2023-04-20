@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="n-layout-page-header">
-      <n-card :bordered="false" title="角色管理">
-        可以新增角色，删除角色，修改角色权限
+      <n-card :bordered="false" title="权限管理">
+        可以新增权限，删除权限，修改权限信息
       </n-card>
     </div>
     <n-card :bordered="false" class="mt-4 proCard">
@@ -21,7 +21,7 @@
                 <PlusOutlined/>
               </n-icon>
             </template>
-            添加角色
+            新增权限
           </n-button>
         </template>
 
@@ -41,11 +41,11 @@
         :label-width="80"
         class="py-4"
       >
-        <n-form-item label="角色名称" path="name">
-          <n-input placeholder="请输入角色名称" v-model:value="formParams.name"/>
+        <n-form-item label="权限名称" path="name">
+          <n-input placeholder="请输入权限名称" v-model:value="formParams.name"/>
         </n-form-item>
         <n-form-item label="描述" path="description">
-          <n-input type="textarea" placeholder="角色描述" v-model:value="formParams.description"/>
+          <n-input type="textarea" placeholder="权限描述" v-model:value="formParams.description"/>
         </n-form-item>
 
       </n-form>
@@ -70,11 +70,14 @@ import {columns} from "./columns";
 import {PlusOutlined} from "@vicons/antd";
 import {getTreeAll} from "@/utils";
 import {useRouter} from "vue-router";
-import {addRoles, deleteRoles, getRolePageConfig, updateRoles} from "@/api/role/role";
-import {getAllUser} from "@/api/user/user";
 import {useAllUserStore} from "@/store/modules/allUser";
-import {storage} from "@/utils/Storage";
 
+import {
+  addPermissions,
+  deletePermissions,
+  pagePermission,
+  updatePermissions
+} from "@/api/permission/permission";
 
 const router = useRouter();
 const formRef: any = ref(null);
@@ -160,11 +163,11 @@ const actionColumn = reactive({
 
 const allUserStore = useAllUserStore();
 const loadDataTable = async (res: any) => {
-  let newVar = await getRolePageConfig(res.page, res.pageSize);
+  let newVar = await pagePermission(res.page, res.pageSize);
 
   let list = newVar.data.data.list;
-  let resp = await getAllUser();
-  allUserStore.setAllUser(resp.data.data.list);
+  // let resp = await getAllUser();
+  // allUserStore.setAllUser(resp.data.data.list);
   return {pageSize: list.size, page: list.page, pageCount: list.total, list: list.records};
 };
 
@@ -187,15 +190,13 @@ function confirmForm(e: any) {
   formRef.value.validate(async (errors) => {
     if (!errors) {
       if (unref(updateOrSave)) {
-        let currentUser = storage.get("CURRENT-USER");
-        await addRoles({
+        await addPermissions({
           name: unref(formParams).name,
           description: unref(formParams).description,
-          createdBy: currentUser.id
         })
         message.success("新建成功");
       } else {
-        await updateRoles({
+        await updatePermissions({
           id: unref(formParams).id,
           name: unref(formParams).name,
           description: unref(formParams).description
@@ -228,19 +229,20 @@ function handleEdit(record: Recordable) {
 
 async function handleDelete(record: Recordable) {
   dialog.warning({
-    title: '警告',
-    content: '确认删除?',
-    positiveText: '确认',
-    negativeText: '取消',
-    onPositiveClick: async () => {
-      await deleteRoles(record.id);
+    title:'警告',
+    content:'确认删除?',
+    positiveText:'确认',
+    negativeText:'取消',
+    onPositiveClick:async ()=>{
+      await deletePermissions(record.id);
       message.info("删除成功");
       reloadTable()
     },
-    onNegativeClick: () => {
+    onNegativeClick:()=>{
       message.info("删除失败");
     }
   })
+
 }
 
 function handleMenuAuth(record: Recordable) {

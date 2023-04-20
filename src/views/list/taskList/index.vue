@@ -74,7 +74,6 @@ import {PlusOutlined} from "@vicons/antd";
 import {useRouter} from "vue-router";
 import {type FormRules, useDialog} from "naive-ui";
 import {addTasks, deleteTasks, pageTask, updateTasks} from "@/api/task/task";
-import {Tasks} from "@/interface/ApiInterface";
 
 const rules: FormRules = {
   taskName: {

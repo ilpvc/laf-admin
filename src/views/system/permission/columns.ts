@@ -9,7 +9,7 @@ export const columns = [
     key: "id"
   },
   {
-    title: "角色名称",
+    title: "权限名称",
     key: "name"
   },
   {
@@ -43,16 +43,5 @@ export const columns = [
         }
       );
     }
-  },
-  {
-    title: "创建者",
-    key: "createdBy",
-    render(row) {
-      return h(
-        'i',
-        {},
-        allUserStore.getAllUserMap.get(row.createdBy) || "不存在"
-      );
-    },
-  },
+  }
 ];

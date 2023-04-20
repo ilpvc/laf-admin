@@ -1,13 +1,14 @@
-import type { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
+import type {AxiosRequestConfig, AxiosInstance, AxiosResponse} from 'axios';
 
 import axios from 'axios';
-import { AxiosCanceler } from './axiosCancel';
-import { isFunction } from '@/utils/is';
-import { cloneDeep } from 'lodash-es';
+import {AxiosCanceler} from './axiosCancel';
+import {isFunction} from '@/utils/is';
+import {cloneDeep} from 'lodash-es';
 
-import type { RequestOptions, CreateAxiosOptions, Result, UploadFileParams } from './types';
-import { ContentTypeEnum } from '@/enums/httpEnum';
+import type {RequestOptions, CreateAxiosOptions, Result, UploadFileParams} from './types';
+import {ContentTypeEnum} from '@/enums/httpEnum';
 import {useUserStoreWidthOut} from "@/store/modules/user";
+import {useRouter} from "vue-router";
 
 export * from './axiosTransform';
 
@@ -55,11 +56,11 @@ export class VAxios {
     let conf: AxiosRequestConfig = cloneDeep(config);
     const transform = this.getTransform();
 
-    const { requestOptions } = this.options;
+    const {requestOptions} = this.options;
 
     const opt: RequestOptions = Object.assign({}, requestOptions, options);
 
-    const { beforeRequestHook, requestCatch, transformRequestData } = transform || {};
+    const {beforeRequestHook, requestCatch, transformRequestData} = transform || {};
     if (beforeRequestHook && isFunction(beforeRequestHook)) {
       conf = beforeRequestHook(conf, opt);
     }
@@ -103,7 +104,7 @@ export class VAxios {
   }
 
   private getTransform() {
-    const { transform } = this.options;
+    const {transform} = this.options;
     return transform;
   }
 
@@ -165,7 +166,7 @@ export class VAxios {
     // 请求拦截器配置处理
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
       const {
-        headers: { ignoreCancelToken },
+        headers: {ignoreCancelToken},
       } = config;
       const ignoreCancel =
         ignoreCancelToken !== undefined
@@ -181,8 +182,8 @@ export class VAxios {
 
     // 请求拦截器错误捕获
     requestInterceptorsCatch &&
-      isFunction(requestInterceptorsCatch) &&
-      this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
+    isFunction(requestInterceptorsCatch) &&
+    this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
 
     // 响应结果拦截器处理
     this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
@@ -195,8 +196,8 @@ export class VAxios {
 
     // 响应结果拦截器错误捕获
     responseInterceptorsCatch &&
-      isFunction(responseInterceptorsCatch) &&
-      this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
+    isFunction(responseInterceptorsCatch) &&
+    this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 }
 
@@ -214,6 +215,18 @@ service.interceptors.request.use((config: AxiosRequestConfig) => {
   }
   return config
 }, undefined);
+
+service.interceptors.response.use(response => {
+    return response
+  },
+  error => {
+    console.log(error)
+    if (error.response.status>=400&&error.response.status<500){
+      if (confirm("你还没有登录或者登录过期"))
+      window.location.href = 'http://localhost:8001/#/login';
+    }
+    return error
+  })
 
 
 export {service}

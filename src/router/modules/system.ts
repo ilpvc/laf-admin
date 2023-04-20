@@ -48,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '权限管理',
         },
-        component: () => import('@/views/system/role/role.vue'),
+        component: () => import('@/views/system/permission/permission.vue'),
       },
     ],
   },
