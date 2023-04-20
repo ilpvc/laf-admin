@@ -44,8 +44,9 @@
 import {reactive, ref, unref} from 'vue';
 import {useMessage} from 'naive-ui';
 import {storage} from "@/utils/Storage";
-import {updateUser} from "@/api/user/user";
+import {getUserById, updateUser} from "@/api/user/user";
 import {User} from "@/interface/ApiInterface";
+import {CURRENT_USER} from "@/store/mutation-types";
 
 const rules = {
   name: {
@@ -78,6 +79,7 @@ const formRef: any = ref(null);
 const message = useMessage();
 
 const formValue = reactive({
+  id:storage.get("CURRENT-USER").id,
   realName: storage.get('CURRENT-USER').realName,
   age: storage.get('CURRENT-USER').age,
   gender: storage.get('CURRENT-USER').gender,
@@ -89,8 +91,11 @@ const formValue = reactive({
 function formSubmit() {
   formRef.value.validate(async (errors) => {
     if (!errors) {
-      const user:User = {...unref(formRef)}
-      await updateUser({id:storage.get("CURRENT-USER"),...user})
+      const user:User = {...formValue}
+      await updateUser({...user})
+      const response = await getUserById(formValue.id);
+      console.log(response)
+      storage.set(CURRENT_USER, response.data.data.item);
       message.success('验证成功');
     } else {
       message.error('验证失败，请填写完整信息');

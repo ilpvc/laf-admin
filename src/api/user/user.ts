@@ -41,13 +41,16 @@ export const pageConfig = ({pageNo, pageCount}: { pageNo: number; pageCount: num
     data: {},
   });
 
-export const updateUser = (params: User) =>
-  service.request({
+export const updateUser = (params: User) =>{
+  console.log(params)
+  return service.request({
     url: `/user/updateUser`,
     method: "put",
     params: {},
     data: params
   });
+}
+
 
 export const addUser = (params: User) =>
   service.request({
