@@ -51,6 +51,22 @@ const routes: Array<RouteRecordRaw> = [
         },
         component: () => import('@/views/list/taskList/index.vue'),
       },
+      {
+        path: 'comment-list',
+        name: 'comment-list',
+        meta: {
+          title: '评论列表',
+        },
+        component: () => import('@/views/list/commentList/index.vue'),
+      },
+      {
+        path: 'message-list',
+        name: 'message-list',
+        meta: {
+          title: '消息列表',
+        },
+        component: () => import('@/views/list/messageList/index.vue'),
+      },
       // {
       //   path: 'basic-list',
       //   name: 'basic-list',

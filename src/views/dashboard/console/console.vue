@@ -67,7 +67,7 @@
               v-else
               prefix=""
               :startVal="1"
-              :endVal="saleroom.now"
+              :endVal="saleroom.all"
               class="text-3xl"
             />
           </div>
@@ -89,7 +89,7 @@
               <template v-else>
                 <div class="text-sn"> 总贴数：</div>
                 <div class="text-sn">
-                  <CountTo :startVal="1" :endVal="saleroom.all"/>
+                  <CountTo :startVal="1" :endVal="saleroom.now"/>
                 </div>
               </template>
             </div>

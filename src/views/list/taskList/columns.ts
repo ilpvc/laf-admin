@@ -4,7 +4,7 @@ import {h} from "vue";
 export const columns = [
   {
     title: "id",
-    key: "taskId",
+    key: "id",
     width: 100
   },
   {
