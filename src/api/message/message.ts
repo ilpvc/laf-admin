@@ -1,6 +1,5 @@
-import {MessageQuery} from "@/interface/ApiInterface";
+import { Message, MessageQuery } from "@/interface/ApiInterface";
 import {service} from "@/utils/http/axios/Axios";
-import {Message} from "postcss";
 
 
 export const pageMessageCondition = (
@@ -23,9 +22,9 @@ export const getAllMessages = () =>
     data: {}
   });
 
-export const deleteMessageById = () =>
+export const deleteMessageById = (id:number) =>
   service.request({
-    url: `/message/delete`,
+    url: `/message/${id}`,
     method: "delete",
     params: {},
     data: {}

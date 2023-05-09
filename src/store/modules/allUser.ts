@@ -21,6 +21,11 @@ export const useAllUserStore = defineStore({
       }
       return map
     },
+
+    getAllUserIdAndUserName():User[]{
+     return this.allUser.map(({ id,nickname }) =>({ id:id,nickname:nickname}));
+    },
+
     getUserName():User[]{
       return this.allUser
     }

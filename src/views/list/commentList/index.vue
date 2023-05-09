@@ -73,12 +73,6 @@ const formRef: any = ref(null);
 const actionRef = ref();
 
 const showModal = ref(false);
-const formBtnLoading = ref(false);
-const formParams = reactive({
-  name: "",
-  address: "",
-  date: null
-});
 
 const actionColumn = reactive({
   width: 220,

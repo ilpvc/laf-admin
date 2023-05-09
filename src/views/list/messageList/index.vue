@@ -2,7 +2,7 @@
   <n-card :bordered="false" class="proCard">
     <BasicForm @register="register" @submit="handleSubmit" @reset="handleReset">
       <template #statusSlot="{ model, field }">
-        <n-input v-model:value="model[field]"/>
+        <n-input v-model:value="model[field]" />
       </template>
     </BasicForm>
 
@@ -19,7 +19,7 @@
         <n-button type="primary" @click="addTable">
           <template #icon>
             <n-icon>
-              <PlusOutlined/>
+              <PlusOutlined />
             </n-icon>
           </template>
           新建
@@ -35,54 +35,48 @@
     <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="新建">
       <n-form
         :model="formParams"
-        :rules="rules"
         ref="formRef"
         label-placement="left"
         :label-width="80"
         class="py-4"
       >
-<!--        <n-form-item label="类型" path="typeValue">-->
-<!--          <n-select v-model:value=""-->
-<!--                    :options="[1,2,3].map((v)=>({-->
-<!--                    label: ()=>{-->
-<!--                      if(v===1)return '失物'-->
-<!--                      if(v===2) return '招领'-->
-<!--                      if(v===3) return '其他'-->
-<!--                      },-->
-<!--                    value: v-->
-<!--                    }))"-->
-<!--          />-->
-<!--        </n-form-item>-->
-<!--        <n-form-item :label="3===3? '帖子标题':'物品信息'" path="titleValue">-->
-<!--          <n-input v-model:value="'c'" :placeholder="1? '帖子标题':'物品信息'"/>-->
-<!--        </n-form-item>-->
-<!--        <n-form-item label="具体描述" path="contentValue">-->
-<!--          <n-input-->
-<!--            v-model:value="'陈'"-->
-<!--            placeholder="具体描述"-->
-<!--            type="textarea"-->
-<!--            :autosize="{-->
-<!--          minRows: 3,-->
-<!--          maxRows: 5-->
-<!--        }"-->
-<!--          />-->
-<!--        </n-form-item>-->
-
-
+        <n-form-item label="类型" path="typeValue">
+          <n-select v-model:value="formParams.type"
+                    :options="[1,2,3].map((v)=>({
+                    label: ()=>{
+                      if(v===1)return '群发'
+                      if(v===2) return '单发'
+                      },
+                    value: v
+                    }))"
+          />
+        </n-form-item>
+        <n-form-item v-if="formParams.type===2" label="用户" path="typeValue">
+          <n-select v-model:value="formParams.userId"
+                    :options="allUserStore.getAllUserIdAndUserName.map(v=>({
+                    label:v.nickname,
+                    value:v.id
+                    }))"
+          />
+        </n-form-item>
+        <n-form-item label="消息内容" path="titleValue">
+          <n-input type="textarea" v-model:value="formParams.content" />
+        </n-form-item>
+        <n-button type="success" @click="doAddMessage">提交</n-button>
       </n-form>
     </n-modal>
   </n-card>
 </template>
 
 <script lang="ts" setup>
-import {h, reactive, ref, unref} from "vue";
+import { h, reactive, ref, unref } from "vue";
 // import { useMessage } from 'naive-ui';
-import {BasicTable, TableAction} from "@/components/Table";
-import {BasicForm, FormSchema, useForm} from "@/components/Form/index";
-import {getTableList} from "@/api/table/list";
-import {columns} from "./columns";
-import {PlusOutlined} from "@vicons/antd";
-import {useRouter} from "vue-router";
+import { BasicTable, TableAction } from "@/components/Table";
+import { BasicForm, FormSchema, useForm } from "@/components/Form/index";
+import { getTableList } from "@/api/table/list";
+import { columns } from "./columns";
+import { PlusOutlined } from "@vicons/antd";
+import { useRouter } from "vue-router";
 import {
   type FormRules,
   UploadFileInfo,
@@ -90,16 +84,21 @@ import {
   UploadInst,
   useDialog
 } from "naive-ui";
-import {getAllUser, pageUserCondition} from "@/api/user/user";
-import {addPost, deletePost, pagePost, pagePostCondition} from "@/api/post/post";
-import {useAllUserStore} from "@/store/modules/allUser";
-import {Post} from "@/interface/ApiInterface";
-import {service} from "@/utils/http/axios/Axios";
-import {debounce} from "lodash";
-import {storage} from "@/utils/Storage";
-import {deleteTasks} from "@/api/task/task";
-import {deleteComments, pageCommentsCondition, pageConfigComment} from "@/api/comment/comment";
-import {pageMessageCondition, pageMessageConfig} from "@/api/message/message";
+import { getAllUser, pageUserCondition } from "@/api/user/user";
+import { addPost, deletePost, pagePost, pagePostCondition } from "@/api/post/post";
+import { useAllUserStore } from "@/store/modules/allUser";
+import { Post } from "@/interface/ApiInterface";
+import { service } from "@/utils/http/axios/Axios";
+import { debounce } from "lodash";
+import { storage } from "@/utils/Storage";
+import { deleteTasks } from "@/api/task/task";
+import { deleteComments, pageCommentsCondition, pageConfigComment } from "@/api/comment/comment";
+import {
+  addMessage,
+  deleteMessageById,
+  pageMessageCondition,
+  pageMessageConfig
+} from "@/api/message/message";
 
 
 const schemas: FormSchema[] = [
@@ -112,8 +111,8 @@ const schemas: FormSchema[] = [
       onInput: (e: any) => {
         console.log(e);
       }
-    },
-  },
+    }
+  }
 
 ];
 
@@ -126,10 +125,11 @@ const actionRef = ref();
 const showModal = ref(false);
 const formBtnLoading = ref(false);
 const formParams = reactive({
-  name: "",
-  address: "",
-  date: null
+  type: 1,
+  userId: undefined,
+  content: ""
 });
+
 
 const actionColumn = reactive({
   width: 220,
@@ -158,8 +158,9 @@ const actionColumn = reactive({
   }
 });
 
+
 const [register, {}] = useForm({
-  gridProps: {cols: "1 s:1 m:2 l:3 xl:4 2xl:4"},
+  gridProps: { cols: "1 s:1 m:2 l:3 xl:4 2xl:4" },
   labelWidth: 80,
   schemas
 });
@@ -170,13 +171,12 @@ function addTable() {
 
 const allUserStore = useAllUserStore();
 const loadDataTable = async (resp) => {
-  console.log(resp)
-  let newVar1 = await pageMessageCondition({content: searchValue.value}, resp.page, resp.pageSize);
+  let newVar1 = await pageMessageCondition({ content: searchValue.value }, resp.page, resp.pageSize);
   let list = newVar1.data.data.items;
-  list = list.records.filter(v => v.type !== 3)
+  list = list.records.filter(v => v.type !== 3);
   let res = await getAllUser();
   allUserStore.setAllUser(res.data.data.list);
-  return {list: list, pageNo: resp.page, pageSize: resp.pageSize, pageCount: list.pages};
+  return { list: list, pageNo: resp.page, pageSize: resp.pageSize, pageCount: list.pages };
 };
 
 
@@ -191,7 +191,7 @@ function reloadTable() {
 
 function handleEdit(record: Recordable) {
   console.log("点击了编辑", record);
-  router.push({name: "basic-info", params: {id: record.id}});
+  router.push({ name: "basic-info", params: { id: record.id } });
 }
 
 function handleDelete(record: Recordable) {
@@ -201,7 +201,7 @@ function handleDelete(record: Recordable) {
     positiveText: "确定",
     negativeText: "取消",
     onPositiveClick: async () => {
-      await deleteComments(record.id);
+      await deleteMessageById(record.id);
       reloadTable();
       window["$message"].success("删除成功");
     },
@@ -212,18 +212,29 @@ function handleDelete(record: Recordable) {
 
 }
 
-const searchValue = ref('')
+const searchValue = ref("");
 
 async function handleSubmit(values: Recordable) {
-  searchValue.value = unref(values).title
-  reloadTable()
+  searchValue.value = unref(values).title;
+  reloadTable();
 }
 
 function handleReset(values: Recordable) {
 
 
-  reloadTable()
-  console.log(values.title)
+  reloadTable();
+  console.log(values.title);
+}
+
+async function doAddMessage() {
+  await addMessage({
+    type: formParams.type,
+    userId: formParams.userId,
+    content: formParams.content
+  });
+  window["$message"].success("新增成功");
+  reloadTable();
+  showModal.value = false;
 }
 
 
