@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/form/basic-form',
     component: Layout,
     meta: {
-      title: '用户反馈',
+      title: '审核管理',
       icon: renderIcon(ProfileOutlined),
       sort: 3,
     },
@@ -30,17 +30,28 @@ const routes: Array<RouteRecordRaw> = [
         path: 'basic-form',
         name: 'form-basic-form',
         meta: {
-          title: '用户反馈',
+          title: '反馈审核',
         },
         component: () => import('@/views/form/basicForm/index.vue'),
       },
       {
-        path: 'step-form',
+        path: 'step-form/:id',
         name: 'form-step-form',
         meta: {
           title: '反馈详情',
+          hidden: true,
+          activeMenu: 'basic-form',
         },
         component: () => import('@/views/form/stepForm/stepForm.vue'),
+      },
+
+      {
+        path: 'report.ts-form',
+        name: 'form-report.ts-form',
+        meta: {
+          title: '举报审核',
+        },
+        component: () => import('@/views/form/reportForm/index.vue'),
       },
       // {
       //   path: 'detail',

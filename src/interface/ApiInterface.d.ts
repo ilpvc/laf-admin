@@ -352,6 +352,8 @@ export interface Message {
   userId?: number;
   type?: number;
   content?: string;
+  result?:string;
+  status?:number;
   createdTime?: number;
 }
 
@@ -359,4 +361,6 @@ export interface MessageQuery {
   userId?: number;
   type?: number;
   content?: string;
+  result?:string;
+  status?:number;
 }

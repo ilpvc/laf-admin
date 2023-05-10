@@ -41,7 +41,7 @@ export const pageConfig = ({pageNo, pageCount}: { pageNo: number; pageCount: num
     data: {},
   });
 
-export const updateUser = (params: User) =>{
+export const updateUser = (params: User) => {
   console.log(params)
   return service.request({
     url: `/user/updateUser`,
@@ -60,7 +60,7 @@ export const addUser = (params: User) =>
     data: params
   });
 
-export const getUserById = (id: number) =>
+export const getUserById = (id: number | any) =>
   service.request({
     url: `/user/${id}`,
     method: "get",

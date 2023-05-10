@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="n-layout-page-header">
-      <n-card :bordered="false" title="用户反馈数据">
-        用户在使用过程中遇到的问题
+      <n-card :bordered="false" title="用户举报信息">
+        用户对违规的信息的举报列表
       </n-card>
     </div>
 
@@ -32,6 +32,8 @@ import moment from "moment/moment";
 import router from "@/router";
 import {PlusOutlined} from "@vicons/antd";
 import {useFeedbackStore} from "@/store/modules/feedback";
+import {pageReportCondition} from "@/api/report/report";
+import {getPostById} from "@/api/post/post";
 
 const globSetting = useGlobSetting();
 
@@ -52,11 +54,22 @@ const columns = [
     }
   },
   {
-    title: "反馈内容",
-    key: "content"
+    title: "帖子",
+    key: "postId",
+    render(row){
+      return h(
+        'span',
+        {},
+        postMap.get(row.postId)
+      )
+    }
   },
   {
-    title: "反馈时间",
+    title: '举报原因',
+    key:'content',
+  },
+  {
+    title: "举报时间",
     key: "createdTime",
     render(row) {
       return h(
@@ -83,18 +96,22 @@ const formRef: any = ref(null);
 const message = useMessage();
 const dataTable = ref();
 const data = ref();
-
 function reloadTable() {
   dataTable.value.reload();
 }
 
 let userStore = useAllUserStore();
+const postMap = new Map()
 const loadDataTable = async (resp) => {
   console.log(resp);
-  let newVar1 = await pageMessageCondition({ type: 3 }, resp.page, resp.pageSize);
+  let newVar1 = await pageReportCondition({ }, resp.page, resp.pageSize);
   const list = newVar1.data.data.items;
   let res = await getAllUser();
   userStore.setAllUser(res.data.data.list);
+  for (const report of list.records){
+    const response = await getPostById(report.postId);
+    postMap.set(report.postId,response.data.data.item.title)
+  }
   return { list: list.records, pageNo: resp.page, pageSize: resp.pageSize, pageCount: list.pages };
 };
 
