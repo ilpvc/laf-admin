@@ -294,8 +294,8 @@ function addTable() {
 
 const allUserStore = useAllUserStore();
 const loadDataTable = async (resp) => {
-  let newVar1 = await pagePostCondition({},resp.page, resp.pageSize);
-  const list = newVar1.data.data.list;
+  let newVar1 = await pagePostCondition({status:[1,2,3,4,5]},resp.page, resp.pageSize);
+  const list = newVar1.data.data.items;
   let res = await getAllUser();
   allUserStore.setAllUser(res.data.data.list);
   return { list: list.records, pageNo: resp.page, pageSize: resp.pageSize, pageCount: list.pages };

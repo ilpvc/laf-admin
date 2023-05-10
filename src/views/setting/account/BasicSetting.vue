@@ -96,7 +96,7 @@ function formSubmit() {
       const response = await getUserById(formValue.id);
       console.log(response)
       storage.set(CURRENT_USER, response.data.data.item);
-      message.success('验证成功');
+      message.success('更新成功');
     } else {
       message.error('验证失败，请填写完整信息');
     }

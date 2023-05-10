@@ -21,29 +21,29 @@ const routes: Array<RouteRecordRaw> = [
         path: 'naive-admin',
         name: 'naive-admin',
         meta: {
-          title: 'NaiveAdmin',
-          frameSrc: 'https://www.naiveadmin.com',
+          title: '前台系统',
+          frameSrc: 'http://127.0.0.1:3000/',
         },
         component: IFrame,
       },
-      {
-        path: 'docs',
-        name: 'frame-docs',
-        meta: {
-          title: '项目文档(内嵌)',
-          frameSrc: 'https://jekip.github.io/docs',
-        },
-        component: IFrame,
-      },
-      {
-        path: 'naive',
-        name: 'frame-naive',
-        meta: {
-          title: 'NaiveUi(内嵌)',
-          frameSrc: 'https://www.naiveui.com',
-        },
-        component: IFrame,
-      },
+      // {
+      //   path: 'docs',
+      //   name: 'frame-docs',
+      //   meta: {
+      //     title: '项目文档(内嵌)',
+      //     frameSrc: 'https://jekip.github.io/docs',
+      //   },
+      //   component: IFrame,
+      // },
+      // {
+      //   path: 'naive',
+      //   name: 'frame-naive',
+      //   meta: {
+      //     title: 'NaiveUi(内嵌)',
+      //     frameSrc: 'https://www.naiveui.com',
+      //   },
+      //   component: IFrame,
+      // },
     ],
   },
 ];
