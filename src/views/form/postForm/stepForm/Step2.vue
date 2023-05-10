@@ -7,8 +7,8 @@
     ref="form2Ref"
     style="max-width: 500px; margin: 40px auto 0 80px"
   >
-    <n-form-item label="举报原因">
-      <span>{{ report.content }}</span>
+    <n-form-item label="帖子内容">
+      <span>{{ post.content }}</span>
     </n-form-item>
     <n-form-item label="处理结果" path="status">
       <n-select :options="options"
@@ -16,7 +16,7 @@
     </n-form-item>
     <div style="margin-left: 80px">
       <n-space>
-        <n-button :disabled="report.status!==1" type="primary" :loading="loading"
+        <n-button :disabled="post.status!==2" type="primary" :loading="loading"
                   @click="formSubmit">提交
         </n-button>
         <n-button @click="prevStep">上一步</n-button>
@@ -33,28 +33,30 @@ import {Message} from "@/interface/ApiInterface";
 import {updateMessage} from "@/api/message/message";
 import {useReportStore} from "@/store/modules/report";
 import {updateReport} from "@/api/report/report";
+import {usePostStore} from "@/store/modules/post";
+import {updatePost} from "@/api/post/post";
 
 const form2Ref: any = ref(null);
 const message = useMessage();
 const loading = ref(false);
-const reportStore = useReportStore();
-const report = reportStore.getCurrentReport()
+const postStore = usePostStore();
+const post = postStore.getCurrentPost()
 const formValue = ref(
-   report.status
+   post.status
 );
 
 const options = [
   {
     label:'审核中',
-    value:1
-  },
-  {
-    label: '审核通过',
     value: 2
   },
   {
+    label: '审核通过',
+    value: 1
+  },
+  {
     label: '审核失败',
-    value: 3
+    value: 4
   },
 ]
 
@@ -77,10 +79,10 @@ function formSubmit() {
   loading.value = true;
   form2Ref.value.validate(async (errors) => {
     if (!errors) {
-      if (formValue.value!==1){
-        report.status=formValue.value
-        await updateReport(report)
-        reportStore.setCurrentReport(report)
+      if (formValue.value!==2){
+        post.status=formValue.value
+        await updatePost(post)
+        postStore.setCurrentPost(post)
         emit('nextStep');
       }else {
         loading.value=false

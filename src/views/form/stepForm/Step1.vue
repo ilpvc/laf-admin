@@ -80,7 +80,11 @@ function formSubmit() {
 }
 
 onBeforeMount(async ()=>{
-  const userRes = await getUserById(feedBackMessage.userId);
-  formValue.userName = formValue.userName.concat(userRes.data.data.item.nickname)
+  console.log(feedBackMessage)
+  if (feedBackMessage.userId!==undefined){
+    const userRes = await getUserById(feedBackMessage.userId);
+    formValue.userName = formValue.userName.concat(userRes.data.data.item.nickname)
+  }
+
 })
 </script>

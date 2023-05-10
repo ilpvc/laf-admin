@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="n-layout-page-header">
-      <n-card :bordered="false" title="举报进度">
-        用户举报的进度(已经处理之后的举报信息不能修改)
+      <n-card :bordered="false" title="帖子审核">
+        请管理员认真审核帖子内容
       </n-card>
     </div>
     <n-card :bordered="false" class="mt-4 proCard">
       <n-space vertical class="steps" justify="center">
         <n-steps :current="currentTab" :status="currentStatus">
-          <n-step title="用户举报信息" description="查看用户举报信息" />
-          <n-step title="处理用户举报问题" description="对用户发起的举报进行处理" />
-          <n-step title="完成举报审核" description="用户的举报信息审核完成" />
+          <n-step title="帖子内容" description="检查帖子内容" />
+          <n-step title="处理审核" description="对帖子进行审核处理" />
+          <n-step title="审核完成" description="帖子审核完成" />
         </n-steps>
         <step1 v-if="currentTab === 1" @nextStep="nextStep" />
         <step2 v-if="currentTab === 2" @nextStep="nextStep" @prevStep="prevStep" />

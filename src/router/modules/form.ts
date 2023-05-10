@@ -46,12 +46,41 @@ const routes: Array<RouteRecordRaw> = [
       },
 
       {
-        path: 'report.ts-form',
-        name: 'form-report.ts-form',
+        path: 'report-form',
+        name: 'form-report-form',
         meta: {
           title: '举报审核',
         },
         component: () => import('@/views/form/reportForm/index.vue'),
+      },
+      {
+        path: 'step-report-form/:id',
+        name: 'report-step-form',
+        meta: {
+          title: '举报详情',
+          hidden: true,
+          activeMenu: 'report-form',
+        },
+        component: () => import('@/views/form/reportForm/stepForm/stepForm.vue'),
+      },
+
+      {
+        path: 'post-form',
+        name: 'form-post-form',
+        meta: {
+          title: '帖子审核',
+        },
+        component: () => import('@/views/form/postForm/index.vue'),
+      },
+      {
+        path: 'step-post-form/:id',
+        name: 'post-step-form',
+        meta: {
+          title: '审核详情',
+          hidden: true,
+          activeMenu: 'post-form',
+        },
+        component: () => import('@/views/form/postForm/stepForm/stepForm.vue'),
       },
       // {
       //   path: 'detail',

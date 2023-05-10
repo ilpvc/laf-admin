@@ -109,7 +109,7 @@ import {
   useDialog
 } from "naive-ui";
 import { getAllUser, pageUserCondition } from "@/api/user/user";
-import { addPost, deletePost, pagePost, pagePostCondition } from "@/api/post/post";
+import { addPost, deletePost, pagePostCondition } from "@/api/post/post";
 import { useAllUserStore } from "@/store/modules/allUser";
 import { Post } from "@/interface/ApiInterface";
 import { service } from "@/utils/http/axios/Axios";
@@ -294,16 +294,13 @@ function addTable() {
 
 const allUserStore = useAllUserStore();
 const loadDataTable = async (resp) => {
-  let newVar1 = await pagePost(resp.page, resp.pageSize);
+  let newVar1 = await pagePostCondition({},resp.page, resp.pageSize);
   const list = newVar1.data.data.list;
   let res = await getAllUser();
   allUserStore.setAllUser(res.data.data.list);
   return { list: list.records, pageNo: resp.page, pageSize: resp.pageSize, pageCount: list.pages };
 };
 
-// const loadDataTable =async ()=>{
-//
-// }
 
 function onCheckedRow(rowKeys) {
   console.log(rowKeys);

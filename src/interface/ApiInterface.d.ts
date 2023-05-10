@@ -292,8 +292,8 @@ export interface Report {
   postId?: number;
   content?: string;
   status?: number;
+  createdTime?: string;
   updatedTime?: string;
-  deletedTime?: string;
 }
 
 export interface LikesQuery {

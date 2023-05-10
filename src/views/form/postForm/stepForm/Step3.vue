@@ -8,16 +8,16 @@
             <n-gi>{{ formValue.userName }}</n-gi>
           </n-grid>
           <n-grid cols="2 s:2 m:3 l:3 xl:3 2xl:3" responsive="screen" class="my-1">
-            <n-gi>帖子</n-gi>
-            <n-gi>{{ formValue.post }}</n-gi>
+            <n-gi>帖子标题</n-gi>
+            <n-gi>{{ post.title }}</n-gi>
           </n-grid>
           <n-grid cols="2 s:2 m:3 l:3 xl:3 2xl:3" responsive="screen" class="my-1">
-            <n-gi>举报原因</n-gi>
-            <n-gi>{{ report.content }}</n-gi>
+            <n-gi>帖子内容</n-gi>
+            <n-gi>{{ post.content }}</n-gi>
           </n-grid>
           <n-grid cols="2 s:2 m:3 l:3 xl:3 2xl:3" responsive="screen" class="my-1">
             <n-gi>处理结果</n-gi>
-            <n-gi>{{ report.status===2?'举报成功':'举报失败' }}</n-gi>
+            <n-gi>{{ post.status===1?'审核通过':'审核失败' }}</n-gi>
           </n-grid>
         </div>
       </template>
@@ -30,14 +30,14 @@ import {defineEmits, onBeforeMount, reactive} from 'vue';
 import {useFeedbackStore} from "@/store/modules/feedback";
 import {getUserById} from "@/api/user/user";
 import {useReportStore} from "@/store/modules/report";
-import {getPostById, updatePost} from "@/api/post/post";
+import {getPostById} from "@/api/post/post";
 import {addMessage} from "@/api/message/message";
-import {Post} from "@/interface/ApiInterface";
+import {usePostStore} from "@/store/modules/post";
 
 const emit = defineEmits(['finish', 'prevStep']);
 
-const reportStore = useReportStore();
-const report = reportStore.getCurrentReport()
+const postStore = usePostStore();
+const post = postStore.getCurrentPost()
 const formValue = reactive({
   userName:'',
   post:''
@@ -52,17 +52,14 @@ function finish() {
 }
 
 onBeforeMount(async ()=>{
-  const userRes = await getUserById(report.userId);
+  const userRes = await getUserById(post.userId);
   formValue.userName = formValue.userName.concat(userRes.data.data.item.nickname)
-  const postRes = await getPostById(report.postId)
-  formValue.post = formValue.post.concat(postRes.data.data.item.title)
-  if (report.status===2){
-    let post:Post =postRes.data.data.item
-    post.status=4
-    await updatePost(post)
-    await addMessage({type:2,content:'你的帖子 '+formValue.post+'被举报成功,已禁用 ',userId:post.userId})
+  if (post.status===1){
+    await addMessage({type:2,content:'你的帖子 '+post.title+'审核通过,发布成功',userId:post.userId})
+  }else {
+    await addMessage({type:2,content:'你的帖子 '+post.title+'审核不通过,发布失败',userId:post.userId})
   }
-  await addMessage({type:2,content:'你举报的帖子 '+formValue.post+' '+(report.status===2?'举报成功':'举报失败'),userId:report.userId})
+
 })
 </script>
 

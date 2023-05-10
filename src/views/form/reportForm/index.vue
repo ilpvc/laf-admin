@@ -34,6 +34,7 @@ import {PlusOutlined} from "@vicons/antd";
 import {useFeedbackStore} from "@/store/modules/feedback";
 import {pageReportCondition} from "@/api/report/report";
 import {getPostById} from "@/api/post/post";
+import {useReportStore} from "@/store/modules/report";
 
 const globSetting = useGlobSetting();
 
@@ -85,8 +86,8 @@ const columns = [
     render(row) {
       return h(
         NTag,
-        {type:row.status===0?'error':'success'},
-        row.status===0?'未处理':'已处理'
+        {type:row.status===1?'warning':row.status===2?'success':'error'},
+        row.status===1?'审核中':row.status?'举报成功':'举报失败'
       );
     }
   },
@@ -129,8 +130,8 @@ const actionColumn = reactive({
       style: "button",
       actions: [
         {
-          label: "详情",
-          onClick: toFeedbackDetails.bind(null, record),
+          label: "审核",
+          onClick: toReportDetails.bind(null, record),
           // 根据业务控制是否显示 isShow 和 auth 是并且关系
           ifShow: () => {
             return true;
@@ -147,12 +148,12 @@ const actionColumn = reactive({
   }
 });
 
-const feedbackStore = useFeedbackStore();
-function toFeedbackDetails(record){
+const reportStore = useReportStore();
+function toReportDetails(record){
   console.log(record);
-  feedbackStore.setCurrentFeedbackMessage(unref(record))
+  reportStore.setCurrentReport(unref(record))
   router.push({
-    name:'form-step-form',
+    name:'report-step-form',
     params:{id:record.id}
   })
 }
