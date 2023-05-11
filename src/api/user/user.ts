@@ -1,5 +1,5 @@
 import {http} from '@/utils/http/axios';
-import {LoginParams, Mail, User, UserQuery} from '@/interface/ApiInterface';
+import {LoginParams, Mail, User, UserQuery, UserSecurity} from '@/interface/ApiInterface';
 import {service} from '@/utils/http/axios/Axios';
 
 http.configAxios({
@@ -83,6 +83,14 @@ export const getEmailCode = (params: Mail) =>
   service.request<any>({
     url: `/login/mail`,
     method: "post",
+    params: {},
+    data: params
+  });
+
+export const updateUserSecurity = (params: UserSecurity) =>
+  service.request({
+    url: `/user/updateAccount`,
+    method: "put",
     params: {},
     data: params
   });

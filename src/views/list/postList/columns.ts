@@ -1,6 +1,7 @@
 import { h } from 'vue';
 import { NTag } from 'naive-ui';
 import {useAllUserStore} from "@/store/modules/allUser";
+import moment from "moment";
 
 const allUserStore = useAllUserStore()
 export const columns = [
@@ -50,7 +51,7 @@ export const columns = [
   {
     title: '发帖人',
     key: 'userId',
-    width: 100,
+    width: 80,
     render(row) {
       return h(
         'i',
@@ -72,7 +73,7 @@ export const columns = [
         row.status === 1 ? '正常' : row.status === 2? '待审核':row.status === 3? '已删除':'已禁用'
       );
     },
-    width: 100,
+    width: 70,
   },
   // {
   //   title: '地址',
@@ -86,12 +87,26 @@ export const columns = [
   {
     title: '创建时间',
     key: 'createdTime',
-    width: 100,
+    width: 150,
+    render(row) {
+      return h(
+        'i',
+        {},
+        moment(row.createdTime).format("YYYY-MM-DD HH:mm:ss")
+      )
+    }
   },
 
   {
     title: '更新日期',
     key: 'updatedTime',
-    width: 100,
+    width: 150,
+    render(row) {
+      return h(
+        'i',
+        {},
+        moment(row.updatedTime).format("YYYY-MM-DD HH:mm:ss")
+      )
+    }
   },
 ];

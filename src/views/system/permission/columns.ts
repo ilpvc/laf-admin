@@ -1,5 +1,6 @@
 import { h } from "vue";
 import {useAllUserStore} from "@/store/modules/allUser";
+import moment from "moment";
 
 const allUserStore = useAllUserStore()
 console.log(allUserStore.getAllUserMap);
@@ -23,12 +24,10 @@ export const columns = [
     key: "createdTime",
     render(row) {
       return h(
-        "i",
+        'i',
         {},
-        {
-          default: () => (row.createdTime ? row.createdTime : "无")
-        }
-      );
+        moment(row.createdTime).format("YYYY-MM-DD HH:mm:ss")
+      )
     }
   },
   {
@@ -36,12 +35,10 @@ export const columns = [
     key: "updatedTime",
     render(row) {
       return h(
-        "i",
+        'i',
         {},
-        {
-          default: () => (row.updatedTime ? row.updatedTime : "无")
-        }
-      );
+        moment(row.updatedTime).format("YYYY-MM-DD HH:mm:ss")
+      )
     }
   }
 ];

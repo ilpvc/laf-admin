@@ -18,7 +18,7 @@
       <n-grid-item span="18">
         <n-card :bordered="false" size="small" :title="typeTitle" class="proCard">
           <BasicSetting v-if="type === 1" />
-<!--          <RevealSetting v-if="type === 2" />-->
+          <RevealSetting v-if="type === 2" />
 <!--          <EmailSetting v-if="type === 3" />-->
         </n-card>
       </n-grid-item>
@@ -37,11 +37,11 @@
       desc: '系统常规设置',
       key: 1,
     },
-    // {
-    //   name: '显示设置',
-    //   desc: '系统显示设置',
-    //   key: 2,
-    // },
+    {
+      name: '常见问题',
+      desc: '常见问题设置',
+      key: 2,
+    },
     // {
     //   name: '邮件设置',
     //   desc: '系统邮件设置',

@@ -1,5 +1,5 @@
 import {service} from "@/utils/http/axios/Axios";
-import { Attribute } from "@/interface/ApiInterface";
+import {Attribute, AttributeQuery} from "@/interface/ApiInterface";
 
 
 export const getQuestionLikeKey = (key: string) =>
@@ -46,4 +46,20 @@ export const updateAttrByKey = (params: Attribute) =>
   });
 
 
+export const deleteAttrByCondition = (params: AttributeQuery) =>
+  service.request({
+    url: `/attribute/delete`,
+    method: "post",
+    params: {},
+    data: params
+  });
+
+
+export const addAttribute = (params: Attribute) =>
+  service.request({
+    url: `/attribute/add`,
+    method: "post",
+    params: {},
+    data: params
+  });
 

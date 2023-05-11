@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts" setup>
-import { h, reactive, ref } from "vue";
+import {h, reactive, ref, unref} from "vue";
 // import { useMessage } from 'naive-ui';
 import { BasicTable, TableAction } from "@/components/Table";
 import { BasicForm, FormSchema, useForm } from "@/components/Form/index";
@@ -109,13 +109,14 @@ import {
   useDialog
 } from "naive-ui";
 import { getAllUser, pageUserCondition } from "@/api/user/user";
-import { addPost, deletePost, pagePostCondition } from "@/api/post/post";
+import {addPost, deletePost, pagePostCondition, updatePost} from "@/api/post/post";
 import { useAllUserStore } from "@/store/modules/allUser";
-import { Post } from "@/interface/ApiInterface";
+import {Post, PostQuery} from "@/interface/ApiInterface";
 import { service } from "@/utils/http/axios/Axios";
 import { debounce } from "lodash";
 import { storage } from "@/utils/Storage";
 import { deleteTasks } from "@/api/task/task";
+import {array} from "vue-types";
 
 const rules: FormRules = {
   name: {
@@ -143,9 +144,6 @@ const schemas: FormSchema[] = [
     label: "标题",
     componentProps: {
       placeholder: "请输入标题",
-      onInput: (e: any) => {
-        console.log(e);
-      }
     },
     rules: [{ required: false, message: "请输入姓名", trigger: ["blur"] }]
   },
@@ -258,25 +256,36 @@ const actionColumn = reactive({
         //   auth: ["basic_list"]
         // }
       ],
-      // dropDownActions: [
-      //   {
-      //     label: "启用",
-      //     key: "enabled",
-      //     // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-      //     ifShow: () => {
-      //       return true;
-      //     }
-      //   },
-      //   {
-      //     label: "禁用",
-      //     key: "disabled",
-      //     ifShow: () => {
-      //       return true;
-      //     }
-      //   }
-      // ],
+      dropDownActions: [
+        {
+          label: "启用",
+          key: "enabled",
+          // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+          ifShow: () => {
+            return true;
+          }
+        },
+        {
+          label: "禁用",
+          key: "disabled",
+          ifShow: () => {
+            return true;
+          }
+        }
+      ],
       select: (key) => {
-        window["$message"].info(`您点击了，${key} 按钮`);
+        if (key==='enabled'){
+          let post:Post = unref(record)
+          post.status=1
+          updatePost(post)
+          window["$message"].success('启用成功')
+        }else{
+          let post:Post = unref(record)
+          post.status=2
+          updatePost(post)
+          window["$message"].success('禁用成功')
+        }
+        // window["$message"].info(`您点击了，${key} 按钮`);
       }
     });
   }
@@ -294,7 +303,13 @@ function addTable() {
 
 const allUserStore = useAllUserStore();
 const loadDataTable = async (resp) => {
-  let newVar1 = await pagePostCondition({status:[1,2,3,4,5]},resp.page, resp.pageSize);
+  let newVar1 = await pagePostCondition({
+    title:unref(postQuery).title,
+    status:unref(postQuery).status||[1,2,3,4,5],
+    types:postQuery.value.types
+    },
+    resp.page,
+    resp.pageSize);
   const list = newVar1.data.data.items;
   let res = await getAllUser();
   allUserStore.setAllUser(res.data.data.list);
@@ -351,8 +366,12 @@ function handleDelete(record: Recordable) {
 
 }
 
+const postQuery =ref<PostQuery>({})
 function handleSubmit(values: Recordable) {
-  console.log(values);
+  let status = [values.status]
+  let types = [values.type]
+  postQuery.value = {...unref(values),status:status,types:types}
+  console.log(postQuery.value)
   reloadTable();
 }
 
@@ -386,7 +405,6 @@ async function doSubmit() {
 const doAddPost = debounce(() => {
 
   post.value.image = images.toString().replace(/,/g, " ");
-  // console.log(post.value)
   addPost(post.value).then(res => {
     window["$message"].success("发送成功");
   });
