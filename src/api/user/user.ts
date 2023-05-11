@@ -1,5 +1,5 @@
 import {http} from '@/utils/http/axios';
-import {User, UserQuery} from '@/interface/ApiInterface';
+import {LoginParams, Mail, User, UserQuery} from '@/interface/ApiInterface';
 import {service} from '@/utils/http/axios/Axios';
 
 http.configAxios({
@@ -18,13 +18,8 @@ export function getAllUser() {
 
 export const pageUserCondition = (
   params: UserQuery,
-  {
-    pageNo,
-    pageCount,
-  }: {
-    pageNo: number;
-    pageCount: number;
-  }
+  pageNo: number,
+  pageCount: number
 ) =>
   service({
     url: `/user/pageUserCondition/${pageNo}/${pageCount}`,
@@ -41,7 +36,7 @@ export const pageConfig = ({pageNo, pageCount}: { pageNo: number; pageCount: num
     data: {},
   });
 
-export const updateUser = (params: User) => {
+export const updateUser = (params: User |any) => {
   console.log(params)
   return service.request({
     url: `/user/updateUser`,
@@ -76,3 +71,18 @@ export const deleteUser = (id: number) =>
     data: {}
   });
 
+export const register = (params: LoginParams) =>
+  service.request({
+    url: `/register/`,
+    method: "post",
+    params: {},
+    data: params
+  });
+
+export const getEmailCode = (params: Mail) =>
+  service.request<any>({
+    url: `/login/mail`,
+    method: "post",
+    params: {},
+    data: params
+  });

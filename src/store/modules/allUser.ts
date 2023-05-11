@@ -4,12 +4,14 @@ import { store } from "@/store";
 
 interface allUserInfo {
   allUser: User[];
+  currentUser:User;
 }
 
 export const useAllUserStore = defineStore({
   id: "all-user",
   state: (): allUserInfo => ({
-    allUser: []
+    allUser: [],
+    currentUser:{}
   }),
 
   getters: {
@@ -28,12 +30,19 @@ export const useAllUserStore = defineStore({
 
     getUserName():User[]{
       return this.allUser
+    },
+
+    getCurrentUser():User{
+      return this.currentUser
     }
   },
 
   actions: {
     setAllUser(u:User[]){
       this.allUser = u
+    },
+    setCurrentUser(u:User){
+      this.currentUser = u
     }
   }
 });

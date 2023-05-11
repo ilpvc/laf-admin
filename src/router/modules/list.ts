@@ -36,6 +36,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/list/userList/index.vue'),
       },
       {
+        path: 'user-info/:id?',
+        name: 'user-info',
+        meta: {
+          title: '用户详情',
+          hidden: true,
+          activeMenu: 'user-list',
+        },
+        component: () => import('@/views/list/userList/info.vue'),
+      },
+      {
         path: 'post-list',
         name: 'post-list',
         meta: {

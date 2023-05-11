@@ -2,7 +2,7 @@
   <n-card :bordered="false" class="proCard">
     <BasicForm @register="register" @submit="handleSubmit" @reset="handleReset">
       <template #statusSlot="{ model, field }">
-        <n-input v-model:value="model[field]" />
+        <n-input v-model:value="model[field]"/>
       </template>
     </BasicForm>
 
@@ -19,7 +19,7 @@
         <n-button type="primary" @click="addTable">
           <template #icon>
             <n-icon>
-              <PlusOutlined />
+              <PlusOutlined/>
             </n-icon>
           </template>
           新建
@@ -34,20 +34,23 @@
     <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="新建">
       <n-form
         :model="formParams"
-        :rules="rules"
         ref="formRef"
         label-placement="left"
         :label-width="80"
         class="py-4"
       >
-        <n-form-item label="名称" path="name">
-          <n-input placeholder="请输入名称" v-model:value="formParams.name" />
+        <n-form-item label="用户名" path="nickname">
+          <n-input placeholder="输入用户名" v-model:value="formParams.nickName"/>
         </n-form-item>
-        <n-form-item label="地址" path="address">
-          <n-input type="textarea" placeholder="请输入地址" v-model:value="formParams.address" />
+        <n-form-item label="邮箱" path="email">
+          <n-input placeholder="请输入邮箱" v-model:value="formParams.email"/>
         </n-form-item>
-        <n-form-item label="日期" path="date">
-          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />
+        <n-form-item label="密码" path="password">
+          <n-input type="password" placeholder="输入密码" v-model:value="formParams.password"/>
+        </n-form-item>
+        <n-form-item label="邮箱验证码" path="code">
+          <n-input placeholder="验证码" v-model:value="formParams.code"/>
+          <n-button @click='sendCode'>发送</n-button>
         </n-form-item>
       </n-form>
 
@@ -64,39 +67,30 @@
 </template>
 
 <script lang="ts" setup>
-import { h, reactive, ref } from "vue";
+import {h, reactive, ref, unref} from "vue";
 // import { useMessage } from 'naive-ui';
-import { BasicTable, TableAction } from "@/components/Table";
-import { BasicForm, FormSchema, useForm } from "@/components/Form/index";
-import { getTableList } from "@/api/table/list";
-import { columns } from "./columns";
-import { PlusOutlined } from "@vicons/antd";
-import { useRouter } from "vue-router";
-import { type FormRules } from "naive-ui";
-import { pageUserCondition } from "@/api/user/user";
+import {BasicTable, TableAction} from "@/components/Table";
+import {BasicForm, FormSchema, useForm} from "@/components/Form/index";
+import {columns} from "./columns";
+import {PlusOutlined} from "@vicons/antd";
+import {useRouter} from "vue-router";
+import {type FormRules} from "naive-ui";
+import {
+  deleteUser,
+  getEmailCode,
+  getUserById,
+  pageUserCondition,
+  updateUser
+} from "@/api/user/user";
+import {LoginParams, User, UserQuery} from "@/interface/ApiInterface";
+import {register as doRegister} from "@/api/user/user";
+import {useAllUserStore} from "@/store/modules/allUser";
+import {func} from "vue-types";
 
-const rules: FormRules = {
-  name: {
-    required: true,
-    trigger: ["blur", "input"],
-    message: "请输入名称"
-  },
-  address: {
-    required: true,
-    trigger: ["blur", "input"],
-    message: "请输入地址"
-  },
-  date: {
-    type: "number",
-    required: true,
-    trigger: ["blur", "change"],
-    message: "请选择日期"
-  }
-};
 
 const schemas: FormSchema[] = [
   {
-    field: "name",
+    field: "nickname",
     labelMessage: "支持模糊查询",
     component: "NInput",
     label: "用户名",
@@ -106,7 +100,7 @@ const schemas: FormSchema[] = [
         console.log(e);
       }
     },
-    rules: [{ required: false, message: "请输入姓名", trigger: ["blur"] }]
+    rules: [{required: false, message: "请输入姓名", trigger: ["blur"]}]
   },
   // {
   //   field: 'mobile',
@@ -172,11 +166,7 @@ const actionRef = ref();
 
 const showModal = ref(false);
 const formBtnLoading = ref(false);
-const formParams = reactive({
-  name: "",
-  address: "",
-  date: null
-});
+const formParams = reactive<LoginParams>({});
 
 const params = ref({
   pageSize: 5,
@@ -229,14 +219,24 @@ const actionColumn = reactive({
         }
       ],
       select: (key) => {
-        window["$message"].info(`您点击了，${key} 按钮`);
+        if (key==="enabled"){
+          let user:User = unref(record)
+          user.status=1
+          updateUser(user)
+          window["$message"].success('启用成功')
+        }else{
+          let user:User = unref(record)
+          user.status=2
+          updateUser(user)
+          window["$message"].success('禁用成功')
+        }
       }
     });
   }
 });
 
 const [register, {}] = useForm({
-  gridProps: { cols: "1 s:1 m:2 l:3 xl:4 2xl:4" },
+  gridProps: {cols: "1 s:1 m:2 l:3 xl:4 2xl:4"},
   labelWidth: 80,
   schemas
 });
@@ -246,16 +246,13 @@ function addTable() {
 }
 
 const loadDataTable = async (res) => {
-  let newVar1 = await pageUserCondition({}, { pageNo: res.page, pageCount: res.pageSize });
+  let newVar1 = await pageUserCondition(userQuery, res.page, res.pageSize);
   const items = newVar1.data.data.items
   console.log(res);
   console.log(items);
-  return { list: items.records, pageNo: res.page, pageSize: res.pageSize ,pageCount: items.pages };
+  return {list: items.records, pageNo: res.page, pageSize: res.pageSize, pageCount: items.pages};
 };
 
-// const loadDataTable =async ()=>{
-//
-// }
 
 function onCheckedRow(rowKeys) {
   console.log(rowKeys);
@@ -265,40 +262,81 @@ function reloadTable() {
   actionRef.value.reload();
 }
 
-function confirmForm(e) {
+async function confirmForm(e) {
   e.preventDefault();
   formBtnLoading.value = true;
-  formRef.value.validate((errors) => {
-    if (!errors) {
-      window["$message"].success("新建成功");
-      setTimeout(() => {
-        showModal.value = false;
-        reloadTable();
-      });
-    } else {
-      window["$message"].error("请填写完整信息");
-    }
-    formBtnLoading.value = false;
+  if (formParams.nickName === undefined) {
+    window["$message"].error("请输入用户名")
+  } else if (formParams.email === undefined) {
+    window["$message"].error('请输入邮箱')
+  } else if (formParams.password === undefined) {
+    window["$message"].error('请输入密码')
+  } else {
+    doRegister(formParams).then(res => {
+      if (res.code === 200) {
+        window["$message"].success(res.data.message)
+      } else {
+        window["$message"].error(res.data.message)
+      }
+
+    })
+    window["$message"].success("新建成功");
+  }
+  setTimeout(() => {
+    showModal.value = false;
+    reloadTable();
   });
+
+  formBtnLoading.value = false;
 }
 
+const userStore = useAllUserStore();
 function handleEdit(record: Recordable) {
-  console.log("点击了编辑", record);
-  router.push({ name: "basic-info", params: { id: record.id } });
+  userStore.setCurrentUser(unref(record))
+  router.push({name: "user-info", params: {id: record.id}});
 }
 
 function handleDelete(record: Recordable) {
+  window['$dialog'].error({
+    title:'警告',
+    content:'你正在删除用户,这是一个危险操作,请确认',
+    positiveText:'确认',
+    negativeText:'取消',
+    onPositiveClick: ()=>{
+      deleteUser(unref(record).id)
+      console.log('删除成功')
+      reloadTable()
+    }
+  })
   console.log("点击了删除", record);
-  window["$message"].info("点击了删除");
 }
 
+let userQuery: UserQuery = {}
+
 function handleSubmit(values: Recordable) {
-  console.log(values);
+  userQuery = {...unref(values)}
   reloadTable();
 }
 
 function handleReset(values: Recordable) {
   console.log(values);
+}
+
+function handleDisable(values: Recordable) {
+  console.log(values)
+}
+
+function handleEnable(values: Recordable){
+  console.log(values)
+}
+
+function sendCode() {
+  if (formParams.email === null) {
+    window['$message'].error('请输入邮箱')
+    return
+  }
+  getEmailCode({userEmail: formParams.email})
+  window['$message'].success('发送成功')
 }
 </script>
 
