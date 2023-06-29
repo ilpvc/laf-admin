@@ -104,18 +104,3 @@ yarn build
 | :-: | :-: | :-: | :-: | :-: |
 | not support | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
 
-## 维护者
-[@Ah jung](https://github.com/jekip)
-
-## 交流
-
-`Naive Ui Admin` 使用或者其他问题，都可以在群内讨论或提问。
-
-![160335146-c28dd205-4600-4d62-b2c6-6456034ab7b1](https://user-images.githubusercontent.com/19426584/217689718-407e6cb9-dd3b-4a11-a025-3c58834b52ff.jpg)
-
-## 赞助
-#### 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励 🍹。
-
-![donate](https://jekip.github.io/docs/images/sponsor.png)
-
-[Paypal Me](https://www.paypal.com/paypalme/majunping)
